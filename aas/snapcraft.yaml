@@ -1,0 +1,44 @@
+name: ascii-as-a-service-demo
+version: 0.42
+summary: Convert live streams to ascii output!
+description: This demo intend to show how to assemble different pieces, some coming from ubuntu, other coming from
+ a git repo to create an amazing user experience on converting content to ascii output.
+ This one is part of the demo tour at https://developer.ubuntu.com/snappy/get-started/as-dev
+
+apps:
+  video-stream-service-app:
+    command: vlc-netcat-streamer.wrapper
+    plugs: [unconfined-plug]
+  streamchooser-webserver:
+    command: streamchooser-webserver
+    daemon: simple
+    plugs: [unconfined-plug]
+
+plugs:
+  unconfined-plug:
+    interface: old-security
+    security-template: unconfined
+
+parts:
+  video-stream:
+    plugin: copy
+    source: .
+    files:
+      vlc-netcat-streamer.wrapper: vlc-netcat-streamer.wrapper
+      vlc-netcat-streamer: vlc-netcat-streamer
+    stage-packages: [vlc]
+  webserver:
+    plugin: go
+    source: https://github.com/didrocks/streamchooser-webserver
+    source-type: git
+  # Should not be needed (Files: support in go plugin?)
+  assets:
+    plugin: copy
+    files:
+      parts/webserver/src/mainpage.tmpl: mainpage.tmpl
+    after:
+      - webserver
+  workaround-vlc:
+    plugin: make
+    source: . 
+    after: [video-stream]

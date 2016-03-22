@@ -1,0 +1,27 @@
+#!/bin/sh -ex
+
+# WORKAROUND: change to $SNAP_DATA as services aren't started from it for now
+cd $SNAP_DATA
+
+echo `ps -o pgid= $$`>vlc.pid
+
+stream_link_file="input_video"
+
+while [ ! -f $stream_link_file ]; do
+    echo "No file to read provided yet. Use http://<machine_ip>:8042 to read provide the url you want to convert to ascii"
+    sleep 5
+done
+
+# all snaps always start in a writable snap personal directory
+. ./$stream_link_file
+if [ -z "$STREAM_URL" ]; then
+    echo "Invalid $stream_link_file file, deleting and exiting"
+    rm $stream_link_file
+    exit 1
+fi
+echo "Reading $STREAM_URL"
+
+# Note that we use $SNAP to reference to the root of our snap binary package, enabling us to access
+# unexposed binaries and files.
+COLUMNS=150 LINES=40 $SNAP/usr/bin/vlc --vout caca $STREAM_URL | nc -vv -k -l 0.0.0.0 8043 -
+
