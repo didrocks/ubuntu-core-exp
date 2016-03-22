@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 # WORKAROUND: change to $SNAP_DATA as services aren't started from it for now
 cd $SNAP_DATA
