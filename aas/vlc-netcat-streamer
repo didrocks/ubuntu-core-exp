@@ -23,5 +23,5 @@ echo "Reading $STREAM_URL"
 
 # Note that we use $SNAP to reference to the root of our snap binary package, enabling us to access
 # unexposed binaries and files.
-COLUMNS=150 LINES=40 $SNAP/usr/bin/vlc --vout caca $STREAM_URL | nc -vv -k -l 0.0.0.0 8043 -
+COLUMNS=150 LINES=40 $SNAP/usr/bin/vlc --vout caca --avcodec-hurry-up --avcodec-fast --avcodec-skip-frame=3 --avcodec-skiploopfilter=4 --sout-avcodec-hurry-up --no-sout-avcodec-interlace-me $STREAM_URL | nc -vv -k -l 0.0.0.0 8043 -
 
