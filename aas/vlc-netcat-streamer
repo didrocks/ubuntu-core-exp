@@ -21,7 +21,11 @@ if [ -z "$STREAM_URL" ]; then
 fi
 echo "Reading $STREAM_URL"
 
+# drop some frames for rpi2 as vlc doesn't have hw accell here
+VLC_OPTION=""
+`uname -a | grep -q raspi2` && VLC_OPTIONS="--avcodec-hurry-up --avcodec-fast --avcodec-skip-frame=3 --avcodec-skiploopfilter=4 --sout-avcodec-hurry-up --no-sout-avcodec-interlace-me"
+
 # Note that we use $SNAP to reference to the root of our snap binary package, enabling us to access
 # unexposed binaries and files.
-COLUMNS=150 LINES=40 $SNAP/usr/bin/vlc --vout caca --avcodec-hurry-up --avcodec-fast --avcodec-skip-frame=3 --avcodec-skiploopfilter=4 --sout-avcodec-hurry-up --no-sout-avcodec-interlace-me $STREAM_URL | nc -vv -k -l 0.0.0.0 8043 -
+COLUMNS=150 LINES=40 $SNAP/usr/bin/vlc --vout caca $VLC_OPTIONS $STREAM_URL | nc -vv -k -l 0.0.0.0 8043 -
 
