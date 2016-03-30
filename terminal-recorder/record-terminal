@@ -12,9 +12,10 @@ if [ -z "$SNAP" ]; then
   PATH=$SNAP/bin:$PATH
 else
   # First, return to current pwd from where we launch the command line app
+  SNAP_VERSION=$(basename $(dirname $0))
   echo """/!\ You did run from a confined command, you won't be able to run other snap commands here.
 If you want to run other snaps app while still recording, please exit and use instead:
-$0
+${0/$SNAP_VERSION/current}
 """
   cd $SNAP_OLD_PWD
 fi
