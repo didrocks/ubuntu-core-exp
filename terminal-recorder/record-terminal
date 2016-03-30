@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo -n "Enter title of your recording: "
+read title
+
+datefmt=`date +"%T.%d-%m-%y"`
+filename=${title// /_}_$datefmt
+
+asciinema rec "$filename" -t "$title"
