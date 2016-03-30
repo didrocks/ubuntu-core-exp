@@ -1,9 +1,29 @@
 #!/bin/bash
 
+# As we don't have interfaces for "shell", and we want yet executing other SNAPS, we need then to run directly from
+# /snaps/bin/terminal-recorder-demo.*/current/record-terminal
+if [ -z "$SNAP" ]; then
+  SNAP=$(dirname $(readlink -f $0))
+  SNAP_USER_DATA="$HOME/$SNAP"
+  if [ ! -d "$SNAP_USER_DATA" ]; then
+     mkdir -p "$SNAP_USER_DATA"
+  fi
+  export HOME="$SNAP_USER_DATA"
+  PATH=$SNAP/bin:$PATH
+else
+  # First, return to current pwd from where we launch the command line app
+  echo """/!\ You did run from a confined command, you won't be able to run other snap commands here.
+If you want to run other snaps app while still recording, please exit and use instead:
+$0
+"""
+  cd $SNAP_OLD_PWD
+fi
+
 echo -n "Enter title of your recording: "
 read title
 
 datefmt=`date +"%T.%d-%m-%y"`
 filename=${title// /_}_$datefmt
+filename=${title// /_}_$datefmt.asciinema
 
-asciinema rec "$filename" -t "$title"
+asciinema rec "$HOME/$filename" -t "$title"
