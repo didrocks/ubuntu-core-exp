@@ -8,7 +8,7 @@ if [ -z "$SNAP" ]; then
   if [ ! -d "$SNAP_USER_DATA" ]; then
      mkdir -p "$SNAP_USER_DATA"
   fi
-  export HOME="$SNAP_USER_DATA"
+  # That might trigger some errors in subshell, to check
   PATH=$SNAP/bin:$PATH
 else
   # First, return to current pwd from where we launch the command line app
