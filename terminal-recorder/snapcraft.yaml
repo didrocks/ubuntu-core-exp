@@ -1,0 +1,34 @@
+name: terminal-recorder-demo
+version: 0.42
+summary: Record your terminal to replay them later!
+description: This demo intend to show how to assemble different pieces, some coming from ubuntu, other coming from
+ a git repo to create an amazing user experience by recording your terminal input and outputs and provide a webserver
+ to replay those.
+ This one is part of the demo tour at https://developer.ubuntu.com/snappy/get-started/as-dev
+
+apps:
+  record-terminal:
+    command: record-terminal
+    plugs: [unconfined-plug]
+  #webserver:
+  #  command: record-terminal-webserver
+  #  daemon: simple
+  #  plugs: [unconfined-plug]
+
+plugs:
+  unconfined-plug:
+    interface: old-security
+    security-template: unconfined
+
+parts:
+  asciinema:
+    plugin: go
+    source: https://github.com/asciinema/asciinema
+    source-type: git
+  recorder-command:
+    # will be an external source once patched
+    plugin: copy
+    source: .
+    # should be optional
+    files:
+      record-terminal: record-terminal
