@@ -10,10 +10,10 @@ apps:
   record-terminal:
     command: record-terminal.limited
     plugs: [unconfined-plug]
-  #webserver:
-  #  command: record-terminal-webserver
-  #  daemon: simple
-  #  plugs: [unconfined-plug]
+  webserver:
+    command: bin/asciinema-local-server
+    daemon: simple
+    plugs: [unconfined-plug]
 
 plugs:
   unconfined-plug:
@@ -34,3 +34,7 @@ parts:
       record-terminal: record-terminal
       record-terminal.limited: record-terminal.limited
     stage-packages: [qrencode]
+  webserver:
+    plugin: nodejs
+    source: https://github.com/didrocks/asciinema-local-server
+    source-type: git
