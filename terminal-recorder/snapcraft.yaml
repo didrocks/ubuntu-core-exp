@@ -33,3 +33,4 @@ parts:
     files:
       record-terminal: record-terminal
       record-terminal.limited: record-terminal.limited
+    stage-packages: [qrencode]

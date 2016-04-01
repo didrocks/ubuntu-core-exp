@@ -31,3 +31,5 @@ chown -R ubuntu:ubuntu "$SNAP_USER_DATA/$filename"
 
 # READ IP filename
 ip=`cat "$SNAP_DATA/server_ip"`
+echo "Your recording is available at:"
+qrencode -t ASCII "http://$ip/$filename"
