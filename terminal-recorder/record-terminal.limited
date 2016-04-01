@@ -2,7 +2,7 @@
 
 # As we don't have interfaces for "shell", and we want yet executing other SNAPS, we need then to run directly from
 # /snaps/bin/terminal-recorder-demo.*/current/record-terminal
-if [ ! -z "$SNAP_VERSION" ]
+if [ ! -z "$SNAP_VERSION" ]; then
   # First, return to current pwd from where we launch the command line app
   current_path=${0/$SNAP_VERSION/current}
   # strip limited suffix for that mentioning the right command
