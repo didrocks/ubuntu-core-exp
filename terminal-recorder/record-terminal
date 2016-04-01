@@ -1,30 +1,12 @@
 #!/bin/bash
 
-# As we don't have interfaces for "shell", and we want yet executing other SNAPS, we need then to run directly from
-# /snaps/bin/terminal-recorder-demo.*/current/record-terminal
-if [ -z "$SNAP" ]; then
-  SNAP=$(dirname $(readlink -f $0))
-  SNAP_USER_DATA="$HOME/$SNAP"
-  if [ ! -d "$SNAP_USER_DATA" ]; then
-     mkdir -p "$SNAP_USER_DATA"
-  fi
-  # That might trigger some errors in subshell, to check
-  PATH=$SNAP/bin:$PATH
-else
-  # First, return to current pwd from where we launch the command line app
-  SNAP_VERSION=$(basename $(dirname $0))
-  echo """/!\ You did run from a confined command, you won't be able to run other snap commands here.
-If you want to run other snaps app while still recording, please exit and use instead:
-${0/$SNAP_VERSION/current}
-"""
-  cd $SNAP_OLD_PWD
+# This command is run directly, we exports some data and use the generate wrapper to finish settings things up
+export SNAP=$(dirname $(readlink -f $0))
+SNAP_DATA=/var/lib$SNAP
+SNAP_USER_DATA="${HOME/\/root/\/home\/ubuntu/}/$SNAP"
+if [ ! -d "$SNAP_USER_DATA" ]; then
+   mkdir -p "$SNAP_USER_DATA"
+   chown -R ubuntu:ubuntu "$SNAP_USER_DATA"
 fi
 
-echo -n "Enter title of your recording: "
-read title
-
-datefmt=`date +"%T.%d-%m-%y"`
-filename=${title// /_}_$datefmt
-filename=${title// /_}_$datefmt.asciinema
-
-asciinema rec "$HOME/$filename" -t "$title"
+exec "$SNAP/$O.limited.wrapper" $*

@@ -8,7 +8,7 @@ description: This demo intend to show how to assemble different pieces, some com
 
 apps:
   record-terminal:
-    command: record-terminal
+    command: record-terminal.limited
     plugs: [unconfined-plug]
   #webserver:
   #  command: record-terminal-webserver
@@ -32,3 +32,4 @@ parts:
     # should be optional
     files:
       record-terminal: record-terminal
+      record-terminal.limited: record-terminal.limited

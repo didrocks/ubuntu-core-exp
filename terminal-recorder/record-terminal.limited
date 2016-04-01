@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# As we don't have interfaces for "shell", and we want yet executing other SNAPS, we need then to run directly from
+# /snaps/bin/terminal-recorder-demo.*/current/record-terminal
+if [ ! -z "$SNAP_VERSION" ]
+  # First, return to current pwd from where we launch the command line app
+  current_path=${0/$SNAP_VERSION/current}
+  # strip limited suffix for that mentioning the right command
+  command_to_run=${current_path/\.limited/}
+  echo """/!\ You did run from a confined command, you won't be able to run other snap commands here.
+If you want to run other snaps app while still recording, please exit and use instead:
+$command_to_run
+"""
+  cd $SNAP_OLD_PWD
+fi
+
+# Fix SNAP_USER_DATA as we save files only in one place
+SNAP_USER_DATA="${SNAP_USER_DATA/\/root/\/home\/ubuntu/}"
+
+echo -n "Enter title of your recording: "
+read title
+
+datefmt=`date +"%T.%d-%m-%y"`
+filename=${title// /_}_$datefmt
+filename=${title// /_}_$datefmt.asciinema
+
+asciinema rec "$SNAP_USER_DATA/$filename" -t "$title"
+
+# in case we were root, chown it
+chown -R ubuntu:ubuntu "$SNAP_USER_DATA/$filename"
+
+# READ IP filename
+ip=`cat "$SNAP_DATA/server_ip"`
