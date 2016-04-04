@@ -13,12 +13,15 @@ apps:
   webserver:
     command: bin/asciinema-local-server
     daemon: simple
-    plugs: [unconfined-plug]
+    plugs: [listener]
 
 plugs:
   unconfined-plug:
     interface: old-security
     security-template: unconfined
+  listener:
+    interface: old-security
+    caps: [network-listener]
 
 parts:
   asciinema:
