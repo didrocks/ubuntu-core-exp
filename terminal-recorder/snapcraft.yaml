@@ -7,37 +7,31 @@ description: This demo intend to show how to assemble different pieces, some com
  This one is part of the demo tour at https://developer.ubuntu.com/snappy/get-started/as-dev
 
 apps:
-  record-terminal:
-    command: record-terminal.limited
-    plugs: [unconfined-plug]
-  webserver:
+  asciinema-service:
     command: bin/asciinema-local-server
     daemon: simple
     plugs: [listener]
+  record-terminal:
+    command: record-terminal.limited
+    plugs: [unconfined-plug]
 
 plugs:
-  unconfined-plug:
-    interface: old-security
-    security-template: unconfined
   listener:
     interface: old-security
     caps: [network-listener]
+  unconfined-plug:
+    interface: old-security
+    security-template: unconfined
 
 parts:
-  asciinema:
-    plugin: go
-    source: https://github.com/asciinema/asciinema
-    source-type: git
-  recorder-command:
-    # will be an external source once patched
-    plugin: copy
-    source: .
-    # should be optional
-    files:
-      record-terminal: record-terminal
-      record-terminal.limited: record-terminal.limited
-    stage-packages: [qrencode, byobu]
   webserver:
     plugin: nodejs
     source: https://github.com/didrocks/asciinema-local-server
     source-type: git
+  asciinema:
+    plugin: go
+    source: https://github.com/asciinema/asciinema
+    source-type: git
+  recorder-command-glue:
+    plugin: copy
+    stage-packages: [qrencode, byobu]
