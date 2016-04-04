@@ -24,7 +24,7 @@ datefmt=`date +"%T.%d-%m-%y"`
 filename=${title// /_}_$datefmt
 filename=${title// /_}_$datefmt.asciinema
 
-asciinema rec "$SNAP_USER_DATA/$filename" -t "$title"
+asciinema rec "$SNAP_USER_DATA/$filename" -t "$title" -c byobu
 
 # in case we were root, chown it
 chown -R ubuntu:ubuntu "$SNAP_USER_DATA/$filename"

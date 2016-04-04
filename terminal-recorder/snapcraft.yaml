@@ -33,7 +33,7 @@ parts:
     files:
       record-terminal: record-terminal
       record-terminal.limited: record-terminal.limited
-    stage-packages: [qrencode]
+    stage-packages: [qrencode, byobu]
   webserver:
     plugin: nodejs
     source: https://github.com/didrocks/asciinema-local-server
