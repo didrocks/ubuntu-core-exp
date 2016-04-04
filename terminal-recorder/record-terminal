@@ -3,10 +3,5 @@
 # This command is run directly, we exports some data and use the generate wrapper to finish settings things up
 export SNAP=$(dirname $(readlink -f $0))
 export SNAP_DATA=/var/lib$SNAP
-export SNAP_USER_DATA="${HOME/\/root/\/home\/ubuntu/}/$SNAP"
-if [ ! -d "$SNAP_USER_DATA" ]; then
-   mkdir -p "$SNAP_USER_DATA"
-   chown -R ubuntu:ubuntu "$SNAP_USER_DATA"
-fi
 
 exec "$SNAP/command-record-terminal.wrapper" $*

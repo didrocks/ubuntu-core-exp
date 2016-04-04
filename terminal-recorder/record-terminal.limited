@@ -14,8 +14,8 @@ $command_to_run
   cd $SNAP_OLD_PWD
 fi
 
-# Fix SNAP_USER_DATA as we save files only in one place
-SNAP_USER_DATA="${SNAP_USER_DATA/\/root/\/home\/ubuntu/}"
+# Use the space created by the server to record asciinema content
+RECORDS_DIR=$SNAP_DATA/records
 
 echo -n "Enter title of your recording: "
 read title
@@ -24,10 +24,8 @@ datefmt=`date +"%T.%d-%m-%y"`
 filename=${title// /_}_$datefmt
 filename=${title// /_}_$datefmt.asciinema
 
-asciinema rec "$SNAP_USER_DATA/$filename" -t "$title" -c byobu
+asciinema rec "$RECORDS_DIR/$filename" -t "$title" -c byobu
 
-# in case we were root, chown it
-chown -R ubuntu:ubuntu "$SNAP_USER_DATA/$filename"
 
 # READ IP filename
 ip=`cat "$SNAP_DATA/server_ip"`
