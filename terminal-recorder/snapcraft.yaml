@@ -34,4 +34,6 @@ parts:
     source-type: git
   recorder-command-glue:
     plugin: copy
+    source: https://github.com/didrocks/terminal-recorder-glue
+    source-type: git
     stage-packages: [qrencode, byobu]
