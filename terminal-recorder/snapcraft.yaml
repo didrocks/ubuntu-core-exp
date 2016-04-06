@@ -36,4 +36,6 @@ parts:
     plugin: copy
     source: https://github.com/didrocks/terminal-recorder-glue
     source-type: git
+    files:
+      '*': '.'
     stage-packages: [qrencode, byobu]
