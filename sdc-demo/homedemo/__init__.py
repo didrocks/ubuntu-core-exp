@@ -78,4 +78,7 @@ def main():
     set_logging_from_args(sys.argv, parser)
     args = parser.parse_args()
 
+    # detect faces every 3 seconds
+    GLib.timeout_add_seconds(3, detect_face)
+
     mainloop.run()
