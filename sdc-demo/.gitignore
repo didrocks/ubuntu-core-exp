@@ -1,0 +1,7 @@
+parts/
+snap/
+stage/
+*.snap
+
+*.pyc
+.bzr
