@@ -18,9 +18,17 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 from gi.repository import GLib
+import logging
 import signal
 import sys
 
+_mainloop = None
+logger = logging.getLogger(__name__)
+
+
+def get_mainloop():
+    """Return mainloop object"""
+    return _mainloop
 
 class MainLoop(object):
     """Mainloop simple wrapper"""
@@ -30,6 +38,8 @@ class MainLoop(object):
         # Glib steals the SIGINT handler and so, causes issue in the callback
         # https://bugzilla.gnome.org/show_bug.cgi?id=622084
         signal.signal(signal.SIGINT, signal.SIG_DFL)
+        global _mainloop
+        _mainloop = self
 
     def run(self):
         self.mainloop.run()
