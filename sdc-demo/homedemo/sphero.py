@@ -20,10 +20,11 @@
 import logging
 import os
 import sys
+from time import sleep
 from mock import Mock
 
 from home import get_home
-from tools import MainLoop
+from tools import MainLoop, get_mainloop
 
 # enable importing kulka as if it was an external module
 sys.path.insert(0, os.path.dirname(__file__))
@@ -73,6 +74,39 @@ class Sphero:
     @MainLoop.in_mainloop_thread
     def sleep(self):
         self.sphero.sleep()
+
+    @MainLoop.in_mainloop_thread
+    def move_to(self, room_name):
+        '''Ask moving to a specific room_name. Ensure one action is finished before starting the next one'''
+        home = get_home()
+        room = home.rooms.get(room_name, None)
+        if not room:
+            logger.error("{} isn't a valid room".format(room_name))
+            get_mainloop().quit()
+        self._move_to(room)
+
+    def _move_to(self, room, ingoback=False):
+        '''Internal move_to implementation, without passing to the main loop as it can recall itself (travel back)'''
+        logger.info("Travelling to {}".format(room.name))
+        previous_room = self.current_room
+
+        for path in self.current_room.paths[room.name]:
+            logger.debug("Issuing roll{}".format(path))
+            self.sphero.roll(*path)
+            sleep(3)
+
+        # set that we are in new room
+        self.current_room = room
+
+        # execute event
+        if not ingoback:
+            logger.info("Executing room event")
+            room.event(self.sphero)
+
+        # travel back to previous room
+        if not room.stay:
+            logger.info("We can't stay in that room, travelling back")
+            self._move_to(previous_room, ingoback=True)
 
 
 def get_sphero(without_sphero=False):
