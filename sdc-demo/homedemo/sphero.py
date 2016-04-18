@@ -38,7 +38,12 @@ class Sphero:
 
     def __init__(self):
         logger.debug("Connecting to sphero")
-        self.sphero = kulka.Kulka("68:86:E7:07:C6:73")
+        sphero_hw = "sphero.hw"
+        try:
+            self.sphero = kulka.Kulka(open(sphero_hw).read().strip())
+        except IOError:
+            logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
+            sys.exit(1)
         logger.debug("Connected to sphero")
         self.sphero.set_inactivity_timeout(3600)
         self.sphero.set_rgb(*self.default_sphero_color)
