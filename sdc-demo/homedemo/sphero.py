@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 class Sphero:
 
-    default_sphero_color = (0, 0, 255)
+    default_sphero_color = (221, 72, 20)
 
     def __init__(self, without_sphero=False):
         if not without_sphero:
