@@ -87,6 +87,7 @@ class Home:
     def _build_direct_paths(self):
         """Build direct room to room connection and reproducity"""
         for room_name in self.rooms:
+            logger.debug("Build direct connections for {}".format(room_name))
             room = self.rooms[room_name]
             for connected_room_name in room._raw_paths:
                 if not connected_room_name in self.rooms:
