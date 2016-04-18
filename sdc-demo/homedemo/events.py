@@ -20,17 +20,17 @@
 import sphero
 
 
-def kitchenlight():
+def kitchenlight(sphero):
     print("kitchen light")
 
 
-def music():
+def music(sphero):
     print("play music")
 
 
-def garagedoor():
+def garagedoor(sphero):
     print("garage door")
 
 
-def light():
+def light(sphero):
     print("light")

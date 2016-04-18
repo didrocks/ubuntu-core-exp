@@ -53,7 +53,7 @@ class Home:
             logger.debug("Processing {}".format(room_name))
 
             # set events if any
-            event = None
+            event = lambda sphero: None
             with suppress(KeyError):
                 try:
                     event_name = home_map[room_name]["event"]
