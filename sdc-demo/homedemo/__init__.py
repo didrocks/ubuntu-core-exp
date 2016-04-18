@@ -87,4 +87,9 @@ def main():
     # detect faces every 3 seconds
     GLib.timeout_add_seconds(3, detect_face)
 
+    sphero.move_to("livingroom")
+    sphero.move_to("entrance")
+    sphero.move_to("kitchen")
+    sphero.move_to("livingroom")
+
     mainloop.run()
