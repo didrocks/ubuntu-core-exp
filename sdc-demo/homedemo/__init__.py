@@ -75,13 +75,14 @@ def main():
 
     parser = argparse.ArgumentParser(description="Home demo gateway with robot")
     parser.add_argument("-v", "--verbose", action="count", default=0, help="Increase output verbosity (2 levels)")
+    parser.add_argument("--without-sphero", action="store_true", help="Use a mock sphero instead of a real one")
 
     # set logging level
     set_logging_from_args(sys.argv, parser)
     args = parser.parse_args()
 
     # connect to sphero and set it at starting position
-    get_sphero()
+    sphero = get_sphero(without_sphero=args.without_sphero)
 
     # detect faces every 3 seconds
     GLib.timeout_add_seconds(3, detect_face)

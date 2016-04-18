@@ -20,6 +20,7 @@
 import logging
 import os
 import sys
+from mock import Mock
 
 from home import get_home
 from tools import MainLoop
@@ -36,17 +37,21 @@ class Sphero:
 
     default_sphero_color = (0, 0, 255)
 
-    def __init__(self):
-        logger.debug("Connecting to sphero")
-        sphero_hw = "sphero.hw"
-        try:
-            self.sphero = kulka.Kulka(open(sphero_hw).read().strip())
-        except IOError:
-            logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
-            sys.exit(1)
-        logger.debug("Connected to sphero")
-        self.sphero.set_inactivity_timeout(3600)
-        self.sphero.set_rgb(*self.default_sphero_color)
+    def __init__(self, without_sphero=False):
+        if not without_sphero:
+            logger.debug("Connecting to sphero")
+            sphero_hw = "sphero.hw"
+            try:
+                self.sphero = kulka.Kulka(open(sphero_hw).read().strip())
+            except IOError:
+                logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
+                sys.exit(1)
+            logger.debug("Connected to sphero")
+            self.sphero.set_inactivity_timeout(3600)
+            self.sphero.set_rgb(*self.default_sphero_color)
+        else:
+            logger.info("Using a false sphero")
+            self.sphero = Mock()
         self.current_room = get_home().start_room
 
     @MainLoop.in_mainloop_thread
@@ -70,9 +75,9 @@ class Sphero:
         self.sphero.sleep()
 
 
-def get_sphero():
+def get_sphero(without_sphero=False):
     """Get sphero singleton"""
     global _sphero
     if not _sphero:
-        _sphero = Sphero()
+        _sphero = Sphero(without_sphero=without_sphero)
     return _sphero
