@@ -22,6 +22,8 @@ import os
 import sys
 
 from home import get_home
+from tools import MainLoop
+
 # enable importing kulka as if it was an external module
 sys.path.insert(0, os.path.dirname(__file__))
 import kulka
@@ -42,19 +44,23 @@ class Sphero:
         self.sphero.set_rgb(*self.default_sphero_color)
         self.current_room = get_home().start_room
 
+    @MainLoop.in_mainloop_thread
     def start_calibration(self):
         self.sphero.set_back_led(255)
         self.sphero.set_rgb(0, 0, 0)
 
+    @MainLoop.in_mainloop_thread
     def recenter(self, angle):
         self.sphero.setheading(1)
         self.sphero.move(0, angle)
         self.sphero.setheading(0)
 
+    @MainLoop.in_mainloop_thread
     def end_calibration(self):
         self.sphero.set_rgb(*default_sphero_color)
         self.sphero.set_back_led(0)
 
+    @MainLoop.in_mainloop_thread
     def sleep(self):
         self.sphero.sleep()
 
