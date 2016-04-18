@@ -1,0 +1,21 @@
+kennel:
+  start: true
+  stay: true
+  paths:
+    kitchen: ["40, 90"]
+kitchen:
+  event: "kitchenlight"
+  paths:
+    bedroom: ["20, 90"]
+    entrance: ["30, 180"]
+bedroom:
+  event: "music"
+entrance:
+  paths:
+    garage: ["20, 90"]
+    livingroom: ["40, 270"]
+  stay: true
+garage:
+  event: "garagedoor"
+livingroom:
+  event: "light"
