@@ -17,9 +17,17 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+import logging
+import os
+import sys
+
+from home import get_home
+# enable importing kulka as if it was an external module
+sys.path.insert(0, os.path.dirname(__file__))
 import kulka
 
-sphero = None
+_sphero = None
+logger = logging.getLogger(__name__)
 
 
 class Sphero:
@@ -27,9 +35,12 @@ class Sphero:
     default_sphero_color = (0, 0, 255)
 
     def __init__(self):
+        logger.debug("Connecting to sphero")
         self.sphero = kulka.Kulka("68:86:E7:07:C6:73")
+        logger.debug("Connected to sphero")
         self.sphero.set_inactivity_timeout(3600)
         self.sphero.set_rgb(*self.default_sphero_color)
+        self.current_room = get_home().start_room
 
     def start_calibration(self):
         self.sphero.set_back_led(255)
@@ -50,7 +61,7 @@ class Sphero:
 
 def get_sphero():
     """Get sphero singleton"""
-    global sphero
-    if not sphero:
-        sphero = Sphero()
-    return sphero
+    global _sphero
+    if not _sphero:
+        _sphero = Sphero()
+    return _sphero
