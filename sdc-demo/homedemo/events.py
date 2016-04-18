@@ -19,14 +19,18 @@
 
 from sphero import get_sphero
 
+
 def kitchenlight():
     print("kitchen light")
+
 
 def music():
     print("play music")
 
+
 def garagedoor():
     print("garage door")
+
 
 def light():
     print("light")

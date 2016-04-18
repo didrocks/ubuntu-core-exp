@@ -38,12 +38,12 @@ def detect_face():
         scaleFactor=1.1,
         minNeighbors=5,
         minSize=(30, 30),
-        flags = cv2.CASCADE_SCALE_IMAGE
+        flags=cv2.CASCADE_SCALE_IMAGE
     )
 
     # Draw a rectangle around the faces
     if len(faces) > 0:
-        print("face recognized")
+        logger.debug("Face recognized")
     video_capture.release()
 
     return True

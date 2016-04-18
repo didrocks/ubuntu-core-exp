@@ -27,7 +27,9 @@ import events
 
 logger = logging.getLogger(__name__)
 
+
 class Home:
+
     def __init__(self):
         """Build the house
 
@@ -90,7 +92,7 @@ class Home:
             logger.debug("Build direct connections for {}".format(room_name))
             room = self.rooms[room_name]
             for connected_room_name in room._raw_paths:
-                if not connected_room_name in self.rooms:
+                if connected_room_name not in self.rooms:
                     logger.error("{} is listed as connected to {}, but there is no such room declared. Please "
                                  "declare it".format(connected_room_name, room_name))
                     sys.exit(1)
@@ -105,7 +107,7 @@ class Home:
                 path = []
                 for seg in temp_path:
                     dist, angle = seg
-                    path.append((dist, (angle+180)%360))
+                    path.append((dist, (angle + 180) % 360))
                 self.rooms[connected_room_name].paths[room_name] = path
 
     def _build_other_paths(self):
@@ -132,7 +134,9 @@ class Home:
             room.paths[next_room_name] = new_path
             self._add_connected_room(room, next_room)
 
+
 class Room:
+
     def __init__(self, name, event, stay, raw_paths):
         """Build a room with positional parameter
 

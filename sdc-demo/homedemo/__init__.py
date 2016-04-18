@@ -29,6 +29,7 @@ from facedetection import detect_face
 logger = logging.getLogger(__name__)
 _default_log_level = logging.WARNING
 
+
 def _setup_logging(env_key='LOG_CFG', level=_default_log_level):
     """Setup logging configuration
 
