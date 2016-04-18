@@ -42,6 +42,7 @@ class Home:
 
         self._populate_room_basic_infos(home_map)
         self._build_direct_paths()
+        self._build_other_paths()
 
     def _populate_room_basic_infos(self, home_map):
         """build room to room basic info"""
@@ -98,15 +99,37 @@ class Home:
                 room.paths[connected_room_name] = path
 
                 # other direction
-                print(path)
                 temp_path = path[:]
                 temp_path.reverse()
                 path = []
                 for seg in temp_path:
-                    print(seg)
                     dist, angle = seg
                     path.append((dist, (angle+180)%360))
                 self.rooms[connected_room_name].paths[room_name] = path
+
+    def _build_other_paths(self):
+        """Build all possible paths between all rooms"""
+        for room_name in self.rooms:
+            logger.debug("Build other paths for {}".format(room_name))
+            room = self.rooms[room_name]
+            self._add_connected_room(room, room)
+
+    def _add_connected_room(self, room, current_room):
+        """Add connected room to current room as a path to room"""
+        for next_room_name in current_room.paths.copy():
+            if room.name == next_room_name:
+                continue
+            next_room = self.rooms[next_room_name]
+
+            # if already existing, only add it if shorter
+            new_path = room.paths.get(current_room.name, []) + current_room.paths[next_room_name]
+            with suppress(KeyError):
+                if len(new_path) > len(room.paths[next_room_name]):
+                    continue
+
+            logger.debug("Adding {} new path".format(next_room_name))
+            room.paths[next_room_name] = new_path
+            self._add_connected_room(room, next_room)
 
 class Room:
     def __init__(self, name, event, stay, raw_paths):
