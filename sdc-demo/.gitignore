@@ -5,3 +5,4 @@ stage/
 
 *.pyc
 .bzr
+bower_components/
