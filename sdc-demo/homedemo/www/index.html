@@ -32,6 +32,16 @@
     paper-button.calibrate[active] {
       background-color: var(--canonical-aubergine);
     }
+    paper-slider.calibrate {
+      --paper-slider-knob-color: var(--ubuntu-orange);
+      --paper-slider-disabled-knob-color: var(--ubuntu-orange);
+      --paper-slider-active-color: var(--ubuntu-orange);
+      --paper-slider-pin-color: var(--ubuntu-orange);
+      --paper-slider-pin-start-color: var(--ubuntu-orange);
+      --paper-slider-secondary-color: var(--canonical-aubergine);
+      width: 100%;
+
+    }
   </style>
 </head>
 <body unresolved>
@@ -54,8 +64,13 @@
 
     <template is="dom-bind" id="app">
       <div class="row">
-        <h2>Recalibration sphero</h2>
-        <paper-button id="calibrationButton" toggles raised active={{is_calibrating}} class="custom calibrate">{{calibrationMessage}}</paper-button>
+        <h2>Recalibrating sphero</h2>
+        <div class="three-col last-col">
+          <paper-button id="calibrationButton" toggles raised active={{is_calibrating}} class="custom calibrate">{{calibrationMessage}}</paper-button>
+        </div>
+        <div class="nine-col last-col">
+          <paper-slider id="calibrationSlider" class="calibrate" min="-180" max="180" editable pin value="{{calibrationPos}}"></paper-slider>
+        </div>
       </div>
     </template>
 
