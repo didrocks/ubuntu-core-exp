@@ -137,7 +137,8 @@ class Home(object):
             self._add_connected_room(room, next_room)
 
 
-class Room:
+class Room(object):
+    """A room in the house"""
 
     def __init__(self, name, event, stay, raw_paths):
         """Build a room with positional parameter

@@ -34,7 +34,7 @@ _sphero = None
 logger = logging.getLogger(__name__)
 
 
-class Sphero:
+class Sphero(object):
     """The Sphero protected (only one thread access to it) representation"""
     __metaclass__ = Singleton
 
@@ -83,7 +83,7 @@ class Sphero:
         room = Home().rooms.get(room_name, None)
         if not room:
             logger.error("{} isn't a valid room".format(room_name))
-            Mainloop().quit()
+            MainLoop().quit()
         self._move_to(room)
 
     def _move_to(self, room, ingoback=False):
