@@ -8,18 +8,22 @@
 
   // imports are loaded and elements have been registered
   window.addEventListener('WebComponentsReady', function () {
+
     var calibrationButton = document.querySelector('#calibrationButton');
-
     calibrationButton.addEventListener('click', calibrationToggle);
-
     function calibrationToggle(_) {
       if (calibrationButton.active) {
         app.calibrationMessage = 'End calibration';
+
+        // TODO: send calibration message
       } else {
         // reset new 0 as 0
         app.calibrationPos = 0;
         _lastCalibrationPosSent = 0;
         app.calibrationMessage = 'Start calibration';
+
+        // TODO: send end calibration message
+      }
     }
 
     var calibrationSlider = document.querySelector('#calibrationSlider');
@@ -44,7 +48,11 @@
 
 
     // only here get the websocket status back and toggle values if needed
-    var socket = new WebSocket("ws://" + window.location.hostname + ":8002/");
+    //var socket = new WebSocket("ws://" + window.location.hostname + ":8002/");
+
+
+    // initiate calibration toggle label
+    calibrationToggle();
 
   });
 
