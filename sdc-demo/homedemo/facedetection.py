@@ -27,12 +27,12 @@ from sphero import Sphero
 
 logger = logging.getLogger(__name__)
 
-# Create the filter cascade
-faceCascade = cv2.CascadeClassifier(os.path.join(os.path.dirname(__file__), '..', 'logic.xml'))
-
 INACTIVITY_PERIOD = 30
 
+# Create the filter cascade
+faceCascade = cv2.CascadeClassifier(os.path.join(os.path.dirname(__file__), '..', 'logic.xml'))
 _last_detected_face = None
+
 
 def detect_face():
     # Read the image
@@ -60,8 +60,8 @@ def detect_face():
         logger.info("Face recognized and sphero in ketten, moving to welcome guest")
         sphero.move_to(Home().facedetectdest_room.name)
     # if no activity for a long time and no face either, put the sphero back to the ketten
-    elif (not face_detected and sphero.current_room == Home().facedetectdest_room
-          and (time() - _last_detected_face) > INACTIVITY_PERIOD and (time() - sphero.last_move) > INACTIVITY_PERIOD):
+    elif (not face_detected and sphero.current_room == Home().facedetectdest_room and
+          (time() - _last_detected_face) > INACTIVITY_PERIOD and (time() - sphero.last_move) > INACTIVITY_PERIOD):
         logger.info("No activity or face showing up for a long time, going back to ketten")
         sphero.move_to(Home().start_room.name)
 

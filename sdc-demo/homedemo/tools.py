@@ -35,6 +35,7 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
+
 class MainLoop(object):
     """Mainloop simple wrapper"""
     __metaclass__ = Singleton

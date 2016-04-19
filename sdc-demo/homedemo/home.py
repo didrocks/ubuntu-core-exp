@@ -17,6 +17,7 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+import events
 import logging
 import os
 import sys
@@ -50,7 +51,6 @@ class Home(object):
 
     def _populate_room_basic_infos(self, home_map):
         """build room to room basic info"""
-        import events
         for room_name in home_map:
             logger.debug("Processing {}".format(room_name))
 
@@ -73,9 +73,7 @@ class Home(object):
                 raw_paths[connected_room] = []
                 for path in home_map[room_name]["paths"][connected_room]:
                     dist, angle = path.split(",")
-                    dist = int(dist)
-                    angle = int(angle)
-                    raw_paths[connected_room].append((dist, angle))
+                    raw_paths[connected_room].append((int(dist), int(angle)))
 
             room = Room(room_name, event, stay, raw_paths)
             self.rooms[room_name] = room
