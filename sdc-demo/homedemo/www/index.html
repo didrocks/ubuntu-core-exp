@@ -40,7 +40,10 @@
       --paper-slider-pin-start-color: var(--ubuntu-orange);
       --paper-slider-secondary-color: var(--canonical-aubergine);
       width: 100%;
-
+    }
+    #restartButton {
+      color: white;
+      background-color: var(--paper-red-700);
     }
   </style>
 </head>
@@ -85,8 +88,12 @@
           <paper-slider id="calibrationSlider" class="calibrate" min="-180" max="180" editable pin value="{{calibrationPos}}"></paper-slider>
         </div>
       </div>
+      <div class="row">
+        <div class="horizontal layout center-justified">
+          <paper-button id="restartButton" raised>Shut down and restart</paper-button>
+        </div>
+      </div>
     </template>
-
   </div>
 </div>
 
