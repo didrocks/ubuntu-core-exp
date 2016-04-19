@@ -77,6 +77,7 @@ def main():
     parser = argparse.ArgumentParser(description="Home demo gateway with robot")
     parser.add_argument("-v", "--verbose", action="count", default=0, help="Increase output verbosity (2 levels)")
     parser.add_argument("--without-sphero", action="store_true", help="Use a mock sphero instead of a real one")
+    parser.add_argument("--no-facedetection", action="store_true", help="Disable face detection feature")
 
     # set logging level
     set_logging_from_args(sys.argv, parser)
@@ -90,7 +91,8 @@ def main():
     CommandSocketServer().start()
 
     # detect faces every 3 seconds
-    GLib.timeout_add_seconds(3, detect_face)
+    if not args.no_facedetection:
+        GLib.timeout_add_seconds(3, detect_face)
 
     sphero.move_to("livingroom")
     sphero.move_to("entrance")
