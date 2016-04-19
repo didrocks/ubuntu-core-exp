@@ -11,6 +11,7 @@ kitchen:
 bedroom:
   event: "music"
 entrance:
+  facedetectiondest: true
   paths:
     garage: ["20, 90"]
     livingroom: ["40, 270"]

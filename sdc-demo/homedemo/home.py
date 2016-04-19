@@ -38,6 +38,7 @@ class Home(object):
         start_room is where sphero is at startup"""
         self.rooms = {}
         self.start_room = None
+        self.facedetectdest_room = None
 
         logger.debug("Build home map")
         with open("home.map", 'r') as f:
@@ -87,6 +88,19 @@ class Home(object):
                                      "".format(room_name, self.start_room.name))
                         sys.exit(1)
                     self.start_room = room
+
+            # set if home face detection position
+            with suppress(KeyError):
+                if home_map[room_name]["facedetectiondest"]:
+                    if self.facedetectdest_room:
+                        logger.error("{} is defined as a face detect position but {} is already one. Please only define"
+                                     " one.".format(room_name, self.facedetectdest_room.name))
+                        sys.exit(1)
+                    self.facedetectdest_room = room
+
+        if not self.facedetectdest_room or not self.start_room:
+            logger.error("We need at least having one facedetectiondest and a start room in the home map.")
+            sys.exit(1)
 
     def _build_direct_paths(self):
         """Build direct room to room connection and reproducity"""
