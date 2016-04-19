@@ -57,22 +57,32 @@ class Sphero(object):
             self.sphero = Mock()
         self.current_room = Home().start_room
         self.last_move = time()
+        self.in_calibration = False
 
     @MainLoop.in_mainloop_thread
     def start_calibration(self):
+        """Start calibration phase and turn off stabilizers. Prevent any other move until end_calibration is called"""
+        self._start_calibration_sync()
+
+    def _start_calibration_sync(self):
+        """Sync version of start calibration"""
+        self.in_calibration = True
         self.sphero.set_back_led(255)
         self.sphero.set_rgb(0, 0, 0)
+        self.sphero.setheading(1)
 
     @MainLoop.in_mainloop_thread
     def recenter(self, angle):
-        self.sphero.setheading(1)
+        """Move centering to calibration angle"""
+        self._start_calibration  # ensure we started calibration mode
         self.sphero.move(0, angle)
-        self.sphero.setheading(0)
 
-    @MainLoop.in_mainloop_thread
     def end_calibration(self):
+        """End calibration phase and turn on stabilizer again"""
         self.sphero.set_rgb(*default_sphero_color)
         self.sphero.set_back_led(0)
+        self.sphero.setheading(0)
+        self.in_calibration = False
 
     @MainLoop.in_mainloop_thread
     def sleep(self):
@@ -81,13 +91,16 @@ class Sphero(object):
     @MainLoop.in_mainloop_thread
     def move_to(self, room_name):
         '''Ask moving to a specific room_name. Ensure one action is finished before starting the next one'''
+        if self.in_calibration:
+            logger.info("Move action received, but in calibration mode")
+            return
         room = Home().rooms.get(room_name, None)
         if not room:
             logger.error("{} isn't a valid room".format(room_name))
             MainLoop().quit()
         self._move_to(room)
 
-    def _move_to(self, room, ingoback=False):
+    def _move_to_sync(self, room, ingoback=False):
         '''Internal move_to implementation, without passing to the main loop as it can recall itself (travel back)'''
         logger.info("Travelling to {}".format(room.name))
         previous_room = self.current_room
