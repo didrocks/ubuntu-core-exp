@@ -23,8 +23,6 @@ import sys
 from tools import suppress, Singleton
 import yaml
 
-import events
-
 _home = None
 logger = logging.getLogger(__name__)
 
@@ -51,6 +49,7 @@ class Home(object):
 
     def _populate_room_basic_infos(self, home_map):
         """build room to room basic info"""
+        import events
         for room_name in home_map:
             logger.debug("Processing {}".format(room_name))
 
