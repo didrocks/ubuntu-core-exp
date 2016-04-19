@@ -63,6 +63,19 @@
     </div>
 
     <template is="dom-bind" id="app">
+      <div class="row row-enterprise">
+        <div class="eight-col">
+          <h3>Sphero locator</h3>
+          <p>Sphero is currently in {{current_room}}!</p>
+          <paper-dropdown-menu id="move-sphero" label="Move it to">
+            <paper-listbox class="dropdown-content" selected="1">
+              <template is="dom-repeat" items="{{availables_room}}">
+                <paper-item>{{item}}</paper-item>
+              </template>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+      </div>
       <div class="row">
         <h2>Recalibrating sphero</h2>
         <div class="three-col last-col">

@@ -5,6 +5,8 @@
   app.is_calibrating = false;
   app.calibrationPos = 0;
   var _lastCalibrationPosSent = 0;
+  app.current_room = 'space';
+  app.availables_room = ['Room1', 'Room2', 'Room3', 'Room1', 'Room2', 'Room3'];
 
   // imports are loaded and elements have been registered
   window.addEventListener('WebComponentsReady', function () {
