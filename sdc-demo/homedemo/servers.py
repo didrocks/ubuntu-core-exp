@@ -23,7 +23,14 @@ import logging
 import posixpath
 import urllib
 import os
+import sys
 import threading
+
+# enable importing SimpleWebSocketServer as if it was an external module
+sys.path.insert(0, os.path.dirname(__file__))
+from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
+
+from sphero import Sphero
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +67,29 @@ class OurHttpRequestHandler(SimpleHTTPRequestHandler):
         return path
 
 
+class SpheroServerCommands(WebSocket):
+
+    def __init__(self, *args, **kwargs):
+        super(SpheroServerCommands, self).__init__(*args, **kwargs)
+        self.clients = []
+
+    def handleMessage(self):
+        """Message received from a client"""
+        logger.debug("Received from {}: {}".format(self.address[0], self.data))
+        for client in self.clients:
+            client.sendMessage(self.address[0] + u' - connected')
+
+    def handleConnected(self):
+        """New client connected"""
+        logger.info("New client: {}".format(self.address[0]))
+        self.clients.append(self)
+
+    def handleClose(self):
+        """Client disconnected"""
+        logger.info("Client disconnected: {}".format(self.address[0]))
+        self.clients.remove(self)
+
+
 class StaticServer(threading.Thread):
     """Threaded Static http server"""
 
@@ -71,5 +101,15 @@ class StaticServer(threading.Thread):
         httpd = HTTPServer(server_address, OurHttpRequestHandler)
 
         sa = httpd.socket.getsockname()
-        logger.info("Serving static filesHTTP on {} port {}".format(sa[0], sa[1]))
+        logger.info("Serving static files on {} port {}".format(sa[0], sa[1]))
         httpd.serve_forever()
+
+
+class CommandSocketServer(threading.Thread):
+    """Threaded Command websocket"""
+
+    def run(self):
+        """Start this websocket server in a separate thread"""
+        server = SimpleWebSocketServer('', 8002, SpheroServerCommands)
+        logger.info("Command socket server is on 8002")
+        server.serveforever()
