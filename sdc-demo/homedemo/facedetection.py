@@ -38,6 +38,7 @@ def detect_face():
     # Read the image
     video_capture = cv2.VideoCapture(0)
     ret, image = video_capture.read()
+    video_capture.release()
 
     # Detect faces in the image
     faces = faceCascade.detectMultiScale(
@@ -63,7 +64,5 @@ def detect_face():
           and (time() - _last_detected_face) > INACTIVITY_PERIOD and (time() - sphero.last_move) > INACTIVITY_PERIOD):
         logger.info("No activity or face showing up for a long time, going back to ketten")
         sphero.move_to(Home().start_room.name)
-
-    video_capture.release()
 
     return True
