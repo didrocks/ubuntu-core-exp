@@ -85,8 +85,9 @@ class Sphero(object):
         self.in_calibration = False
 
     @MainLoop.in_mainloop_thread
-    def sleep(self):
-        self.sphero.sleep()
+    def quit(self):
+        logger.info("Exit requested")
+        MainLoop.quit()
 
     @MainLoop.in_mainloop_thread
     def move_to(self, room_name):
