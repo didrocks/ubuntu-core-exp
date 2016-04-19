@@ -20,7 +20,7 @@
 import logging
 import os
 import sys
-from time import sleep
+from time import sleep, time
 from mock import Mock
 
 from home import Home
@@ -56,6 +56,7 @@ class Sphero(object):
             logger.info("Using a false sphero")
             self.sphero = Mock()
         self.current_room = Home().start_room
+        self.last_move = time()
 
     @MainLoop.in_mainloop_thread
     def start_calibration(self):
@@ -101,8 +102,10 @@ class Sphero(object):
 
         # execute event
         if not ingoback:
-            logger.info("Executing room event")
+            logger.info("Executing room event: {}".format(room.event.__name__))
             room.event(self.sphero)
+
+        self.last_move = time()
 
         # travel back to previous room
         if not room.stay:
