@@ -23,6 +23,7 @@ import logging
 import posixpath
 import urllib
 import os
+import threading
 
 logger = logging.getLogger(__name__)
 
@@ -59,13 +60,16 @@ class OurHttpRequestHandler(SimpleHTTPRequestHandler):
         return path
 
 
-def start_http_server():
-    """Start the http server in a separate thread"""
-    server_address = ('', 8001)
+class StaticServer(threading.Thread):
+    """Threaded Static http server"""
 
-    OurHttpRequestHandler.protocol_version = "HTTP/1.1"
-    httpd = HTTPServer(server_address, OurHttpRequestHandler)
+    def run(self):
+        """Start this http server in a separate thread"""
+        server_address = ('', 8001)
 
-    sa = httpd.socket.getsockname()
-    logger.info("Serving static filesHTTP on {} port {}".format(sa[0], sa[1]))
-    httpd.serve_forever()
+        OurHttpRequestHandler.protocol_version = "HTTP/1.1"
+        httpd = HTTPServer(server_address, OurHttpRequestHandler)
+
+        sa = httpd.socket.getsockname()
+        logger.info("Serving static filesHTTP on {} port {}".format(sa[0], sa[1]))
+        httpd.serve_forever()
