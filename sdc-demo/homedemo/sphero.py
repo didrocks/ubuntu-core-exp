@@ -23,8 +23,8 @@ import sys
 from time import sleep
 from mock import Mock
 
-from home import get_home
-from tools import MainLoop, get_mainloop
+from home import Home
+from tools import MainLoop, Singleton
 
 # enable importing kulka as if it was an external module
 sys.path.insert(0, os.path.dirname(__file__))
@@ -35,6 +35,8 @@ logger = logging.getLogger(__name__)
 
 
 class Sphero:
+    """The Sphero protected (only one thread access to it) representation"""
+    __metaclass__ = Singleton
 
     default_sphero_color = (221, 72, 20)
 
@@ -53,7 +55,7 @@ class Sphero:
         else:
             logger.info("Using a false sphero")
             self.sphero = Mock()
-        self.current_room = get_home().start_room
+        self.current_room = Home().start_room
 
     @MainLoop.in_mainloop_thread
     def start_calibration(self):
@@ -78,11 +80,10 @@ class Sphero:
     @MainLoop.in_mainloop_thread
     def move_to(self, room_name):
         '''Ask moving to a specific room_name. Ensure one action is finished before starting the next one'''
-        home = get_home()
-        room = home.rooms.get(room_name, None)
+        room = Home().rooms.get(room_name, None)
         if not room:
             logger.error("{} isn't a valid room".format(room_name))
-            get_mainloop().quit()
+            Mainloop().quit()
         self._move_to(room)
 
     def _move_to(self, room, ingoback=False):
@@ -107,11 +108,3 @@ class Sphero:
         if not room.stay:
             logger.info("We can't stay in that room, travelling back")
             self._move_to(previous_room, ingoback=True)
-
-
-def get_sphero(without_sphero=False):
-    """Get sphero singleton"""
-    global _sphero
-    if not _sphero:
-        _sphero = Sphero(without_sphero=without_sphero)
-    return _sphero

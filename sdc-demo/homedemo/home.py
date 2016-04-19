@@ -20,7 +20,7 @@
 import logging
 import os
 import sys
-from tools import suppress
+from tools import suppress, Singleton
 import yaml
 
 import events
@@ -29,7 +29,9 @@ _home = None
 logger = logging.getLogger(__name__)
 
 
-class Home:
+class Home(object):
+    """The home owner of all rooms and directions of a house"""
+    __metaclass__ = Singleton
 
     def __init__(self):
         """Build the house
@@ -152,12 +154,3 @@ class Room:
 
         # path is the computed real path
         self.paths = {}
-
-
-def get_home():
-    """Get Home singletong"""
-
-    global _home
-    if not _home:
-        _home = Home()
-    return _home

@@ -25,7 +25,7 @@ import sys
 from tools import MainLoop
 
 from facedetection import detect_face
-from sphero import get_sphero
+from sphero import Sphero
 
 logger = logging.getLogger(__name__)
 _default_log_level = logging.WARNING
@@ -82,7 +82,7 @@ def main():
     args = parser.parse_args()
 
     # connect to sphero and set it at starting position
-    sphero = get_sphero(without_sphero=args.without_sphero)
+    sphero = Sphero(without_sphero=args.without_sphero)
 
     # detect faces every 3 seconds
     GLib.timeout_add_seconds(3, detect_face)

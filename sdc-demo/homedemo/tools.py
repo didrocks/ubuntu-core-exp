@@ -35,13 +35,9 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
-
-def get_mainloop():
-    """Return mainloop object"""
-    return _mainloop
-
 class MainLoop(object):
     """Mainloop simple wrapper"""
+    __metaclass__ = Singleton
 
     def __init__(self):
         self.mainloop = GLib.MainLoop()
