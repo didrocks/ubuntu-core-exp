@@ -66,6 +66,7 @@ class Sphero(object):
 
     def _start_calibration_sync(self):
         """Sync version of start calibration"""
+        logger.info("Calibration starting")
         self.in_calibration = True
         self.sphero.set_back_led(255)
         self.sphero.set_rgb(0, 0, 0)
@@ -74,11 +75,13 @@ class Sphero(object):
     @MainLoop.in_mainloop_thread
     def recenter(self, angle):
         """Move centering to calibration angle"""
+        logger.debug("Rotating center by {}".format(angle))
         self._start_calibration  # ensure we started calibration mode
         self.sphero.move(0, angle)
 
     def end_calibration(self):
         """End calibration phase and turn on stabilizer again"""
+        logger.info("Calibration done")
         self.sphero.set_rgb(*default_sphero_color)
         self.sphero.set_back_led(0)
         self.sphero.setheading(0)
