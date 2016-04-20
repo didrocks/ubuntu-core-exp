@@ -48,6 +48,14 @@
       color: white;
       background-color: var(--paper-red-700);
     }
+    paper-toggle-button {
+      --paper-toggle-button-checked-bar-color:  var(--ubuntu-orange);
+      --paper-toggle-button-checked-button-color:  var(--ubuntu-orange);
+      --paper-toggle-button-checked-ink-color: var(--ubuntu-orange);
+      --paper-toggle-button-unchecked-bar-color:  var(--canonical-aubergine);
+      --paper-toggle-button-unchecked-button-color:  var(--canonical-aubergine);
+      --paper-toggle-button-unchecked-ink-color: var(--canonical-aubergine);;
+    }
   </style>
 </head>
 <body unresolved>
@@ -91,6 +99,13 @@
         <div class="nine-col last-col">
           <paper-slider id="calibrationSlider" class="calibrate" min="-180" max="180" editable pin value="{{calibrationPos}}"></paper-slider>
         </div>
+      </div>
+      <div class="row">
+        <h3>Features toggles</h3>
+        <paper-toggle-button id="face-detection-toggle">Face detection</paper-toggle-button>
+        <paper-toggle-button id="speech-recognition-toggle">Speech recognition</paper-toggle-button>
+      </div>
+      <div class="row">
         <h3>Reset manually sphero position (sphero won't move)</h3>
         <paper-dropdown-menu id="manualreset-sphero" label="Reset manually sphero to" disabled$="{{is_calibrating}}">
           <paper-listbox class="dropdown-content" selected="{{current_room_index}}">
