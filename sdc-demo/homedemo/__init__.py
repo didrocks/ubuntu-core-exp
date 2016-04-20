@@ -25,6 +25,7 @@ import sys
 from tools import MainLoop
 
 from facedetection import FaceDetection
+from speechrecognition import SpeechRecognition
 from servers import StaticServer, CommandSocketServer
 from sphero import Sphero
 
@@ -78,6 +79,7 @@ def main():
     parser.add_argument("-v", "--verbose", action="count", default=0, help="Increase output verbosity (2 levels)")
     parser.add_argument("--without-sphero", action="store_true", help="Use a mock sphero instead of a real one")
     parser.add_argument("--no-facedetection", action="store_true", help="Disable face detection feature")
+    parser.add_argument("--no-speechrecognition", action="store_true", help="Disable speech recognition feature")
 
     # set logging level
     set_logging_from_args(sys.argv, parser)
@@ -93,5 +95,9 @@ def main():
     # detect faces every 3 seconds
     f = FaceDetection()
     f.enabled = not args.no_facedetection
+
+    # speech recognition
+    s = SpeechRecognition()
+    s.enabled = not args.no_speechrecognition
 
     mainloop.run()

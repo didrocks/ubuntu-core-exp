@@ -53,8 +53,8 @@ class WebClientsCommands(WebSocket):
             from facedetection import FaceDetection
             FaceDetection().enabled = message
         elif topic == "speechrecognitionchange":
-            logger.info("switch speech recognition to false")
-            # TODO
+            from speechrecognition import SpeechRecognition
+            SpeechRecognition().enabled = message
         elif topic == "move":
             from sphero import Sphero
             Sphero().move_to(message)
