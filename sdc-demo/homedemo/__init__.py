@@ -94,9 +94,4 @@ def main():
     f = FaceDetection()
     f.enabled = not args.no_facedetection
 
-    sphero.move_to("livingroom")
-    sphero.move_to("entrance")
-    sphero.move_to("kitchen")
-    sphero.move_to("livingroom")
-
     mainloop.run()

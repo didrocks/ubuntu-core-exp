@@ -119,7 +119,7 @@ class Sphero(object):
         room = Home().rooms.get(room_name, None)
         if not room:
             logger.error("{} isn't a valid room".format(room_name))
-            MainLoop().quit()
+            return
         self._move_to_sync(room)
 
     def _move_to_sync(self, room, ingoback=False):

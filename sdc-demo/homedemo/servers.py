@@ -196,7 +196,6 @@ class StaticServer(threading.Thread):
         """Start this http server in a separate thread"""
         server_address = ('', 8001)
 
-        OurHttpRequestHandler.protocol_version = "HTTP/1.1"
         httpd = HTTPServer(server_address, OurHttpRequestHandler)
 
         sa = httpd.socket.getsockname()

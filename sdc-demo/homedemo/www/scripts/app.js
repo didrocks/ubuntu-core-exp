@@ -143,9 +143,6 @@
       }
     };
 
-    // TODO: receive message from client (and below should be in client callback)
-
-
   });
 
 })(document);
