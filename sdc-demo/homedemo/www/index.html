@@ -83,7 +83,7 @@
           <h3>Sphero locator</h3>
           <p>Sphero is currently in {{current_room}}!</p>
           <paper-dropdown-menu id="move-sphero" label="Move it to" disabled$="{{is_calibrating}}">
-            <paper-listbox class="dropdown-content" selected="{{current_room_index}}">
+            <paper-listbox class="dropdown-content" selected="[[current_room_index]]">
               <template is="dom-repeat" items="{{availables_room}}">
                 <paper-item>{{item}}</paper-item>
               </template>
@@ -109,7 +109,7 @@
       <div class="row">
         <h3>Reset manually sphero position (sphero won't move)</h3>
         <paper-dropdown-menu id="manualreset-sphero" label="Reset manually sphero to" disabled$="{{is_calibrating}}">
-          <paper-listbox class="dropdown-content" selected="{{current_room_index}}">
+          <paper-listbox class="dropdown-content" selected="[[current_room_index]]">
             <template is="dom-repeat" items="{{availables_room}}">
               <paper-item>{{item}}</paper-item>
             </template>

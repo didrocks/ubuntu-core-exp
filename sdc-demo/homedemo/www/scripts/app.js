@@ -71,7 +71,8 @@
         return;
       }
 
-      // TODO: send sphero move message
+      var msg = { topic: 'move', content: moveSpheroButton.selectedItemLabel };
+      websocket.send(JSON.stringify(msg));
     });
 
     /* manually set current location */
@@ -82,7 +83,8 @@
         return;
       }
 
-      // TODO: send sphero manual set message
+      var msg = { topic: 'manualmove', content: manualResetSpheroButton.selectedItemLabel };
+      websocket.send(JSON.stringify(msg));
     });
 
     /* change face detection enablement */
@@ -99,6 +101,12 @@
       websocket.send(JSON.stringify(msg));
     });
 
+    /* quit server */
+    document.querySelector('#restartButton').addEventListener('click', function () {
+       var msg = { topic: 'quit', content: '' };
+       websocket.send(JSON.stringify(msg));
+     });
+
     // only here get the websocket status back and toggle values if needed
     var websocket = new ReconnectingWebSocket('ws://' + window.location.hostname + ':8002/');
     websocket.onopen = function () {
@@ -114,7 +122,7 @@
     };
 
     websocket.onmessage = function (e) {
-      console.log('Message: ' + e.data);
+      console.log('Message received: ' + e.data);
       var message = JSON.parse(e.data);
       switch (message.topic) {
         case 'roomslist':

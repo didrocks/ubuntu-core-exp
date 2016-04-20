@@ -100,7 +100,7 @@ class Sphero(object):
     @MainLoop.in_mainloop_thread
     def quit(self):
         logger.info("Exit requested")
-        MainLoop.quit()
+        MainLoop().quit()
 
     @MainLoop.in_mainloop_thread
     def move_to(self, room_name):
@@ -137,4 +137,4 @@ class Sphero(object):
         # travel back to previous room
         if not room.stay:
             logger.info("We can't stay in that room, travelling back")
-            self._move_to(previous_room, ingoback=True)
+            self._move_to_sync(previous_room, ingoback=True)

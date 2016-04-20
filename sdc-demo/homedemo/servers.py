@@ -55,6 +55,15 @@ class WebClientsCommands(WebSocket):
         elif topic == "speechrecognitionchange":
             logger.info("switch speech recognition to false")
             # TODO
+        elif topic == "move":
+            from sphero import Sphero
+            Sphero().move_to(message)
+        elif topic == "manualmove":
+            from sphero import Sphero
+            Sphero().current_room = Home().rooms[message]
+        elif topic == "quit":
+            from sphero import Sphero
+            Sphero().quit()
 
     def handleConnected(self):
         """New client connected"""

@@ -19,6 +19,7 @@
 
 from gi.repository import GLib
 import logging
+import os
 import signal
 import sys
 
@@ -59,7 +60,7 @@ class MainLoop(object):
 
     def _clean_up(self, exit_code):
         self.mainloop.quit()
-        sys.exit(exit_code)
+        os._exit(exit_code)
 
     @staticmethod
     def in_mainloop_thread(function):
