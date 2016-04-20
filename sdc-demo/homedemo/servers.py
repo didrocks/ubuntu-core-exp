@@ -102,6 +102,18 @@ class WebClientsCommands(WebSocket):
             client._sendCurrentRoom()
 
     @staticmethod
+    def sendFaceDetectionStateAll():
+        """Send face detection message state to all clients"""
+        for client in WebClientsCommands.clients:
+            client._sendFaceDetectionState()
+
+    @staticmethod
+    def sendSpeechRecognitionStateAll():
+        """Send speech recognition message state to all clients"""
+        for client in WebClientsCommands.clients:
+            client._sendSpeechRecognitionState
+
+    @staticmethod
     def sendCalibrationStateAll():
         """Send calibration state to all clients"""
         for client in WebClientsCommands.clients:

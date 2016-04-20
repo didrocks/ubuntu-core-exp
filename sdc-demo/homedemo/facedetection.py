@@ -24,6 +24,7 @@ from time import time
 import cv2
 
 from home import Home
+from servers import WebClientsCommands
 from sphero import Sphero
 from tools import Singleton
 
@@ -61,6 +62,7 @@ class FaceDetection(object):
                 GLib.source_remove(self._source_id)
             self._source_id = None
         self._last_detected_face = time()
+        WebClientsCommands.sendFaceDetectionStateAll()
 
     def detect_face(self):
         # Read the image
