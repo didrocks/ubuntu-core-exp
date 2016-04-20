@@ -102,7 +102,7 @@ class Sphero(object):
         if not room:
             logger.error("{} isn't a valid room".format(room_name))
             MainLoop().quit()
-        self._move_to(room)
+        self._move_to_sync(room)
 
     def _move_to_sync(self, room, ingoback=False):
         '''Internal move_to implementation, without passing to the main loop as it can recall itself (travel back)'''
