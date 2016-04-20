@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 class FaceDetection(object):
-    """The home owner of all rooms and directions of a house"""
+    """Face detection handler class"""
     __metaclass__ = Singleton
 
     # Create the filter cascade
