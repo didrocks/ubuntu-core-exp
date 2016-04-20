@@ -41,7 +41,10 @@
       --paper-slider-secondary-color: var(--canonical-aubergine);
       width: 100%;
     }
-    #restartButton {
+    #move-sphero {
+      --paper-input-container-input-color: white;
+    }
+    #restartButton:not([disabled]) {
       color: white;
       background-color: var(--paper-red-700);
     }
@@ -70,8 +73,8 @@
         <div class="eight-col">
           <h3>Sphero locator</h3>
           <p>Sphero is currently in {{current_room}}!</p>
-          <paper-dropdown-menu id="move-sphero" label="Move it to">
-            <paper-listbox class="dropdown-content" selected="1">
+          <paper-dropdown-menu id="move-sphero" label="Move it to" disabled$="{{is_calibrating}}">
+            <paper-listbox class="dropdown-content" selected="{{current_room_index}}">
               <template is="dom-repeat" items="{{availables_room}}">
                 <paper-item>{{item}}</paper-item>
               </template>
@@ -82,16 +85,24 @@
       <div class="row">
         <h2>Administration part</h2>
         <h3>Recalibrating sphero</h3>
-        <div class="three-col last-col">
+        <div class="three-col">
           <paper-button id="calibrationButton" toggles raised active={{is_calibrating}} class="custom calibrate">{{calibrationMessage}}</paper-button>
         </div>
         <div class="nine-col last-col">
           <paper-slider id="calibrationSlider" class="calibrate" min="-180" max="180" editable pin value="{{calibrationPos}}"></paper-slider>
         </div>
+        <h3>Reset manually sphero position (sphero won't move)</h3>
+        <paper-dropdown-menu id="manualreset-sphero" label="Reset manually sphero to" disabled$="{{is_calibrating}}">
+          <paper-listbox class="dropdown-content" selected="{{current_room_index}}">
+            <template is="dom-repeat" items="{{availables_room}}">
+              <paper-item>{{item}}</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
       </div>
       <div class="row">
         <div class="horizontal layout center-justified">
-          <paper-button id="restartButton" raised>Shut down and restart</paper-button>
+          <paper-button id="restartButton" raised disabled$="{{is_calibrating}}">Shut down and restart</paper-button>
         </div>
       </div>
     </template>
