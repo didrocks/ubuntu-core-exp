@@ -4,7 +4,6 @@
   var app = document.querySelector('#app');
   app.is_calibrating = false;
   app.calibrationPos = 0;
-  var _lastCalibrationPosSent = 0;
   app.current_room = 'space';
   app.availables_room = ['earth', 'space', 'gallifrey', 'skaro'];
   app.current_room_index = 0;
@@ -19,16 +18,13 @@
     var calibrationButton = document.querySelector('#calibrationButton');
     calibrationButton.addEventListener('click', calibrationToggle);
     function calibrationToggle() {
-      if (calibrationButton.active) {
-
-        // TODO: send calibration message
-      } else {
+      if (!calibrationButton.active) {
         // reset new 0 as 0
         app.calibrationPos = 0;
-        _lastCalibrationPosSent = 0;
-
-        // TODO: send end calibration message
       }
+
+      var msg = { topic: 'calibrationstate', content: calibrationButton.active };
+      websocket.send(JSON.stringify(msg));
 
       refreshCalibrationMessage();
     }
@@ -58,9 +54,8 @@
         calibrationToggle();
       }
 
-      // send position over
-      // calibrationSlider.immediateValue - _lastCalibrationPosSent
-      _lastCalibrationPosSent = calibrationSlider.immediateValue;
+      var msg = { topic: 'recenter', content: -calibrationSlider.immediateValue };
+      websocket.send(JSON.stringify(msg));
     }
 
     /* move current location */

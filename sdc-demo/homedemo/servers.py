@@ -61,6 +61,15 @@ class WebClientsCommands(WebSocket):
         elif topic == "manualmove":
             from sphero import Sphero
             Sphero().current_room = Home().rooms[message]
+        elif topic == "calibrationstate":
+            from sphero import Sphero
+            if message:
+                Sphero().start_calibration()
+            else:
+                Sphero().end_calibration()
+        elif topic == "recenter":
+            from sphero import Sphero
+            Sphero().recenter(message)
         elif topic == "quit":
             from sphero import Sphero
             Sphero().quit()
