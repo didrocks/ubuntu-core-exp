@@ -9,6 +9,9 @@
   app.availables_room = ['earth', 'space', 'gallifrey', 'skaro'];
   app.current_room_index = 0;
 
+  app.facedetection_enabled = false;
+  app.speechrecognition_enabled = false;
+
   // imports are loaded and elements have been registered
   window.addEventListener('WebComponentsReady', function () {
 
@@ -82,6 +85,20 @@
       // TODO: send sphero manual set message
     });
 
+    /* change face detection enablement */
+    var faceDetectionSwitch = document.querySelector('#face-detection-toggle');
+    faceDetectionSwitch.addEventListener('change', function () {
+      var msg = { topic: 'facedetectionchange', content: faceDetectionSwitch.active };
+      websocket.send(JSON.stringify(msg));
+    });
+
+    /* change speech recognition enablement */
+    var speechRecogntionSwitch = document.querySelector('#speech-recognition-toggle');
+    speechRecogntionSwitch.addEventListener('change', function () {
+      var msg = { topic: 'speechrecognitionchange', content: speechRecogntionSwitch.active };
+      websocket.send(JSON.stringify(msg));
+    });
+
     // only here get the websocket status back and toggle values if needed
     var websocket = new WebSocket('ws://' + window.location.hostname + ':8002/');
     websocket.onopen = function () {
@@ -112,8 +129,14 @@
           app.is_calibrating = message.content;
           refreshCalibrationMessage();
           break;
+        case 'facedetectionstate':
+          app.facedetection_enabled = message.content;
+          break;
+        case 'speechrecognitionstate':
+          app.speechrecognition_enabled = message.content;
+          break;
         default:
-          console.log('Unknown message: ' + message);
+          console.log('Unknown message');
       }
     };
 

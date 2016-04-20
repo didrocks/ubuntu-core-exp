@@ -45,8 +45,16 @@ class WebClientsCommands(WebSocket):
     def handleMessage(self):
         """Message received from a client"""
         logger.debug("Received from {}: {}".format(self.address[0], self.data))
-        #for client in WebClientsCommands.clients:
-        #    client.sendMessage(self.address[0] + u' - connected')
+        data = json.loads(self.data)
+        topic = data["topic"]
+        message = data["content"]
+
+        if topic == "facedetectionchange":
+            from facedetection import FaceDetection
+            FaceDetection().enabled = message
+        elif topic == "speechrecognitionchange":
+            logger.info("switch speech recognition to false")
+            # TODO
 
     def handleConnected(self):
         """New client connected"""
@@ -55,6 +63,8 @@ class WebClientsCommands(WebSocket):
         self._sendCurrentRoom()
         self._sendRoomList()
         self._sendCalibrationState()
+        self._sendFaceDetectionState()
+        self._sendSpeechRecognitionState()
 
     def handleClose(self):
         """Client disconnected"""
@@ -93,6 +103,15 @@ class WebClientsCommands(WebSocket):
         """Send calibration message state"""
         from sphero import Sphero
         self.__sendMessage("calibrationstate", Sphero().in_calibration)
+
+    def _sendFaceDetectionState(self):
+        """Send face detection message state"""
+        from facedetection import FaceDetection
+        self.__sendMessage("facedetectionstate", FaceDetection().enabled)
+
+    def _sendSpeechRecognitionState(self):
+        """Send speech recognition message state"""
+        self.__sendMessage("speechrecognitionstate", True)
 
     def __sendMessage(self, topic, content):
         """Wrap object and message in a json payload"""
