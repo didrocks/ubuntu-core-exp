@@ -3,6 +3,7 @@
 
   var app = document.querySelector('#app');
   app.is_calibrating = false;
+  app.started_calibration = false;
   app.calibrationPos = 0;
   app.current_room = 'space';
   app.availables_room = ['earth', 'space', 'gallifrey', 'skaro'];
@@ -21,6 +22,8 @@
       if (!calibrationButton.active) {
         // reset new 0 as 0
         app.calibrationPos = 0;
+      } else {
+        app.started_calibration = true;
       }
 
       var msg = { topic: 'calibrationstate', content: calibrationButton.active };
@@ -32,8 +35,10 @@
     function refreshCalibrationMessage() {
       if (calibrationButton.active) {
         app.calibrationMessage = 'End calibration';
+        calibrationSlider.disabled = !app.started_calibration;
       } else {
         app.calibrationMessage = 'Start calibration';
+        calibrationSlider.disabled = false;
       }
     }
 
@@ -54,7 +59,7 @@
         calibrationToggle();
       }
 
-      var msg = { topic: 'recenter', content: -calibrationSlider.immediateValue };
+      var msg = { topic: 'recenter', content: calibrationSlider.immediateValue };
       websocket.send(JSON.stringify(msg));
     }
 
@@ -129,6 +134,10 @@
           app.current_room_index = app.availables_room.indexOf(app.current_room);
           break;
         case 'calibrationstate':
+          // if we didn't initiate the calibration, turn it to false
+          if (!app.is_calibrating) {
+            app.started_calibration = false;
+          }
           app.is_calibrating = message.content;
           refreshCalibrationMessage();
           break;

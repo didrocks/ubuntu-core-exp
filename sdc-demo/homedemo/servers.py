@@ -69,7 +69,8 @@ class WebClientsCommands(WebSocket):
                 Sphero().end_calibration()
         elif topic == "recenter":
             from sphero import Sphero
-            Sphero().recenter(message)
+            # use -angle to rotate in the counter-clock sense
+            Sphero().recenter(-message)
         elif topic == "quit":
             from sphero import Sphero
             Sphero().quit()
