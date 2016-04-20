@@ -24,7 +24,7 @@ import os
 import sys
 from tools import MainLoop
 
-from facedetection import detect_face
+from facedetection import FaceDetection
 from servers import StaticServer, CommandSocketServer
 from sphero import Sphero
 
@@ -91,8 +91,8 @@ def main():
     CommandSocketServer().start()
 
     # detect faces every 3 seconds
-    if not args.no_facedetection:
-        GLib.timeout_add_seconds(3, detect_face)
+    f = FaceDetection()
+    f.enabled = not args.no_facedetection
 
     sphero.move_to("livingroom")
     sphero.move_to("entrance")
