@@ -116,6 +116,9 @@ class Sphero(object):
         if self.in_calibration:
             logger.info("Move action received, but in calibration mode")
             return
+        if self.current_room.name == room_name:
+            logger.info("Already in {}".format(room_name))
+            return
         room = Home().rooms.get(room_name, None)
         if not room:
             logger.error("{} isn't a valid room".format(room_name))
