@@ -98,7 +98,7 @@ class WebClientsCommands(WebSocket):
 
     @staticmethod
     def sendCurrentRoomAll():
-        """Send current room  to all clients"""
+        """Send current room to all clients"""
         for client in WebClientsCommands.clients:
             client._sendCurrentRoom()
 
@@ -192,6 +192,7 @@ class OurHttpRequestHandler(SimpleHTTPRequestHandler):
         if trailing_slash:
             path += '/'
         return path
+
 
 class SocketCommands(object):
     """Contain the list commands to send to clients"""
