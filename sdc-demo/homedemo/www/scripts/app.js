@@ -100,7 +100,7 @@
     });
 
     // only here get the websocket status back and toggle values if needed
-    var websocket = new WebSocket('ws://' + window.location.hostname + ':8002/');
+    var websocket = new ReconnectingWebSocket('ws://' + window.location.hostname + ':8002/');
     websocket.onopen = function () {
       console.log('websocket connected');
     };
