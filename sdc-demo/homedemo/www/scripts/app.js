@@ -15,18 +15,26 @@
     /* calibration button */
     var calibrationButton = document.querySelector('#calibrationButton');
     calibrationButton.addEventListener('click', calibrationToggle);
-    function calibrationToggle(_) {
+    function calibrationToggle() {
       if (calibrationButton.active) {
-        app.calibrationMessage = 'End calibration';
 
         // TODO: send calibration message
       } else {
         // reset new 0 as 0
         app.calibrationPos = 0;
         _lastCalibrationPosSent = 0;
-        app.calibrationMessage = 'Start calibration';
 
         // TODO: send end calibration message
+      }
+
+      refreshCalibrationMessage();
+    }
+
+    function refreshCalibrationMessage() {
+      if (calibrationButton.active) {
+        app.calibrationMessage = 'End calibration';
+      } else {
+        app.calibrationMessage = 'Start calibration';
       }
     }
 
@@ -75,15 +83,42 @@
     });
 
     // only here get the websocket status back and toggle values if needed
-    //var socket = new WebSocket("ws://" + window.location.hostname + ":8002/");
+    var websocket = new WebSocket('ws://' + window.location.hostname + ':8002/');
+    websocket.onopen = function () {
+      console.log('websocket connected');
+    };
+
+    websocket.onclose = function () {
+      console.log('websocket disconnected');
+    };
+
+    websocket.onerror = function (e) {
+      console.log('Error in websocket: ' + e.data);
+    };
+
+    websocket.onmessage = function (e) {
+      console.log('Message: ' + e.data);
+      var message = JSON.parse(e.data);
+      switch (message.topic) {
+        case 'roomslist':
+          app.availables_room = message.content;
+          app.current_room_index = app.availables_room.indexOf(app.current_room);
+          break;
+        case 'currentroom':
+          app.current_room = message.content;
+          app.current_room_index = app.availables_room.indexOf(app.current_room);
+          break;
+        case 'calibrationstate':
+          app.is_calibrating = message.content;
+          refreshCalibrationMessage();
+          break;
+        default:
+          console.log('Unknown message: ' + message);
+      }
+    };
 
     // TODO: receive message from client (and below should be in client callback)
 
-    // initiate calibration toggle label
-    calibrationToggle();
-
-    // select current sphero position
-    app.current_room_index = app.availables_room.indexOf(app.current_room);
 
   });
 

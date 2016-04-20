@@ -19,6 +19,7 @@
 
 from BaseHTTPServer import HTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
+import json
 import logging
 import posixpath
 import urllib
@@ -30,9 +31,85 @@ import threading
 sys.path.insert(0, os.path.dirname(__file__))
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
-from sphero import Sphero
+from home import Home
+from tools import Singleton
 
 logger = logging.getLogger(__name__)
+
+
+class WebClientsCommands(WebSocket):
+
+    clients = []
+    server = None
+
+    def handleMessage(self):
+        """Message received from a client"""
+        logger.debug("Received from {}: {}".format(self.address[0], self.data))
+        #for client in WebClientsCommands.clients:
+        #    client.sendMessage(self.address[0] + u' - connected')
+
+    def handleConnected(self):
+        """New client connected"""
+        logger.info("New client: {}".format(self.address[0]))
+        WebClientsCommands.clients.append(self)
+        self._sendCurrentRoom()
+        self._sendRoomList()
+        self._sendCalibrationState()
+
+    def handleClose(self):
+        """Client disconnected"""
+        logger.info("Client disconnected: {}".format(self.address[0]))
+        WebClientsCommands.clients.remove(self)
+
+    @staticmethod
+    def sendRoomListAll():
+        """Send room list to all clients"""
+        for client in WebClientsCommands.clients:
+            client._sendRoomList()
+
+    @staticmethod
+    def sendCurrentRoomAll():
+        """Send current room  to all clients"""
+        for client in WebClientsCommands.clients:
+            client._sendCurrentRoom()
+
+    @staticmethod
+    def sendCalibrationStateAll():
+        """Send calibration state to all clients"""
+        for client in WebClientsCommands.clients:
+            client._sendCalibrationState()
+
+    def _sendCurrentRoom(self):
+        """Send current rooms"""
+        from sphero import Sphero
+        self.__sendMessage("currentroom", Sphero().current_room.name)
+
+    def _sendRoomList(self):
+        """Send list of rooms"""
+        rooms = Home().rooms.keys()
+        self.__sendMessage("roomslist", rooms)
+
+    def _sendCalibrationState(self):
+        """Send calibration message state"""
+        from sphero import Sphero
+        self.__sendMessage("calibrationstate", Sphero().in_calibration)
+
+    def __sendMessage(self, topic, content):
+        """Wrap object and message in a json payload"""
+        message_obj = {'topic': topic, 'content': content}
+        msg = unicode(json.dumps(message_obj))
+        logger.debug("Sending: " + msg)
+        self.sendMessage(msg)
+
+
+class CommandSocketServer(threading.Thread):
+    """Threaded Command websocket"""
+
+    def run(self):
+        """Start this websocket server in a separate thread"""
+        WebClientsCommands.server = SimpleWebSocketServer('', 8002, WebClientsCommands)
+        logger.info("Command socket server is on 8002")
+        WebClientsCommands.server.serveforever()
 
 
 class OurHttpRequestHandler(SimpleHTTPRequestHandler):
@@ -66,28 +143,13 @@ class OurHttpRequestHandler(SimpleHTTPRequestHandler):
             path += '/'
         return path
 
+class SocketCommands(object):
+    """Contain the list commands to send to clients"""
+    __metaclass__ = Singleton
 
-class SpheroServerCommands(WebSocket):
-
-    def __init__(self, *args, **kwargs):
-        super(SpheroServerCommands, self).__init__(*args, **kwargs)
+    def __init__(self, server):
         self.clients = []
-
-    def handleMessage(self):
-        """Message received from a client"""
-        logger.debug("Received from {}: {}".format(self.address[0], self.data))
-        for client in self.clients:
-            client.sendMessage(self.address[0] + u' - connected')
-
-    def handleConnected(self):
-        """New client connected"""
-        logger.info("New client: {}".format(self.address[0]))
-        self.clients.append(self)
-
-    def handleClose(self):
-        """Client disconnected"""
-        logger.info("Client disconnected: {}".format(self.address[0]))
-        self.clients.remove(self)
+        self.server = server
 
 
 class StaticServer(threading.Thread):
@@ -103,13 +165,3 @@ class StaticServer(threading.Thread):
         sa = httpd.socket.getsockname()
         logger.info("Serving static files on {} port {}".format(sa[0], sa[1]))
         httpd.serve_forever()
-
-
-class CommandSocketServer(threading.Thread):
-    """Threaded Command websocket"""
-
-    def run(self):
-        """Start this websocket server in a separate thread"""
-        server = SimpleWebSocketServer('', 8002, SpheroServerCommands)
-        logger.info("Command socket server is on 8002")
-        server.serveforever()

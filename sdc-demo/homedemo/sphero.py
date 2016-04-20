@@ -24,6 +24,7 @@ from time import sleep, time
 from mock import Mock
 
 from home import Home
+from servers import WebClientsCommands
 from tools import MainLoop, Singleton
 
 # enable importing kulka as if it was an external module
@@ -55,9 +56,18 @@ class Sphero(object):
         else:
             logger.info("Using a false sphero")
             self.sphero = Mock()
-        self.current_room = Home().start_room
+        self._current_room = Home().start_room
         self.last_move = time()
         self.in_calibration = False
+
+    @property
+    def current_room(self):
+        return self._current_room
+
+    @current_room.setter
+    def current_room(self, value):
+        self._current_room = value
+        WebClientsCommands.sendCurrentRoomAll()
 
     @MainLoop.in_mainloop_thread
     def start_calibration(self):
