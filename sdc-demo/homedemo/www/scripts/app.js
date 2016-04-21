@@ -142,10 +142,12 @@
       switch (message.topic) {
         case 'roomslist':
           app.availables_room = message.content;
+          app.current_room_index = -1; // force a reindex
           app.current_room_index = app.availables_room.indexOf(app.current_room);
           break;
         case 'currentroom':
           app.current_room = message.content;
+          app.current_room_index = -1; // force a reindex
           app.current_room_index = app.availables_room.indexOf(app.current_room);
           break;
         case 'calibrationstate':
