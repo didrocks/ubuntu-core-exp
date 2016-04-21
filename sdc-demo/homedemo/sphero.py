@@ -83,7 +83,7 @@ class Sphero(object):
         self.sphero_list[self.sphero_name]["active"] = False
         self.sphero_list[new_sphero]["active"] = True
         with open(Sphero.SPHERO_FILE, "w") as f:
-            yaml.dump(self.sphero_list, f)
+            yaml.dump(self.sphero_list, f, default_flow_style=False)
         Sphero().quit()
 
     @property
