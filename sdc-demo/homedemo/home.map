@@ -12,6 +12,7 @@ bedroom:
   event: "music"
 entrance:
   facedetectiondest: true
+  speechrecognition: true
   paths:
     garage: ["20, 90"]
     livingroom: ["40, 270"]

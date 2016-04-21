@@ -57,7 +57,7 @@ class SpeechRecognition(object):
         # Read file on disk
         with suppress(IOError):
             # we want to always remove the speech recognition file, even if enabled
-            if self.enabled:
+            if self.enabled and Sphero().current_room.speech_recognition:
                 with open(self.FILENAME) as f:
                     action_name = f.read().strip()
                     dest_room = None

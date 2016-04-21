@@ -67,6 +67,9 @@ class Home(object):
             # set if sphero can stay in this room or not
             stay = home_map[room_name].get("stay", False)
 
+            # speech recognition enabled in that room
+            speech_recognition = home_map[room_name].get("speechrecognition", False)
+
             # fetch the raw path data, transforming list of string in tuples
             raw_paths = {}
             for connected_room in home_map[room_name].get("paths", {}):
@@ -75,7 +78,7 @@ class Home(object):
                     dist, angle = path.split(",")
                     raw_paths[connected_room].append((int(dist), int(angle)))
 
-            room = Room(room_name, event, stay, raw_paths)
+            room = Room(room_name, event, stay, speech_recognition, raw_paths)
             self.rooms[room_name] = room
 
             # set if home rest position
@@ -152,16 +155,18 @@ class Home(object):
 class Room(object):
     """A room in the house"""
 
-    def __init__(self, name, event, stay, raw_paths):
+    def __init__(self, name, event, stay, speech_recognition, raw_paths):
         """Build a room with positional parameter
 
         name is the name of the room
         event is the function to execute when sphero entered the room
         stay defines if sphero should go back to previous room after executing the action
+        speech_recognition defines if speech recognition is enabled in that room
         raw_paths is the uncomputed path data"""
         self.name = name
         self.event = event
         self.stay = stay
+        self.speech_recognition = speech_recognition
         self._raw_paths = raw_paths
 
         # path is the computed real path
