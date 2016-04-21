@@ -59,8 +59,21 @@ class SpeechRecognition(object):
             # we want to always remove the speech recognition file, even if enabled
             if self.enabled:
                 with open(self.FILENAME) as f:
-                    room_name = f.read().strip()
-                    Sphero().move_to(room_name)
+                    action_name = f.read().strip()
+                    dest_room = None
+                    # for now, redo a mapping between actions and room name (FIXME, get all events names as config)
+                    if action_name == "turn_on_the_light" or action_name == "turn_the_light_off":
+                        dest_room = "bedroom"
+                    elif (action_name == "turn_on_the_air_conditioning" or
+                          action_name == "turn_the_air_conditioning_off"):
+                        dest_room = "livingroom"
+                    elif action_name == "open_garage_door" or action_name == "close_garage":
+                        dest_room = "garage"
+                    elif action_name == "kitchen_turn_on_light" or action_name == "kitchen_turn_the_light_off":
+                        dest_room = "kitchen"
+
+                    if dest_room:
+                        Sphero().move_to(dest_room)
             with suppress(OSError):
                 os.remove(self.FILENAME)
 
