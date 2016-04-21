@@ -48,7 +48,6 @@ class Sphero(object):
             logger.debug("Connecting to sphero")
             try:
                 self.sphero_list = yaml.load(open(Sphero.SPHERO_FILE).read())
-                print(self.sphero_list)
             except IOError:
                 logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
                 sys.exit(1)

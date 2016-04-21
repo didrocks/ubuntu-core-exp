@@ -71,6 +71,8 @@ class SpeechRecognition(object):
                         dest_room = "garage"
                     elif action_name == "kitchen_turn_on_light" or action_name == "kitchen_turn_the_light_off":
                         dest_room = "kitchen"
+                    else:
+                        logger.info("Unrecognized speech event")
 
                     if dest_room:
                         Sphero().move_to(dest_room)
