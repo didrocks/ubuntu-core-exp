@@ -117,6 +117,16 @@
         </paper-dropdown-menu>
       </div>
       <div class="row">
+        <h3>Set another sphero as default (will restart server)</h3>
+        <paper-dropdown-menu id="change-default-sphero" label="Change sphero to">
+          <paper-listbox class="dropdown-content" selected="[[current_sphero_index]]">
+            <template is="dom-repeat" items="{{spheros}}">
+              <paper-item>{{item}}</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </div>
+      <div class="row">
         <div class="horizontal layout center-justified">
           <paper-button id="restartButton" raised disabled$="{{is_calibrating}}">Shut down and restart</paper-button>
         </div>

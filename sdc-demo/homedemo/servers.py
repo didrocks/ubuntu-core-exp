@@ -71,6 +71,9 @@ class WebClientsCommands(WebSocket):
             from sphero import Sphero
             # use -angle to rotate in the counter-clock sense
             Sphero().recenter(-message)
+        elif topic == "changesphero":
+            from sphero import Sphero
+            Sphero().change_default_sphero(message)
         elif topic == "quit":
             from sphero import Sphero
             Sphero().quit()
@@ -84,6 +87,7 @@ class WebClientsCommands(WebSocket):
         self._sendCalibrationState()
         self._sendFaceDetectionState()
         self._sendSpeechRecognitionState()
+        self._sendSpheroInfo()
 
     def handleClose(self):
         """Client disconnected"""
@@ -143,6 +147,12 @@ class WebClientsCommands(WebSocket):
     def _sendSpeechRecognitionState(self):
         """Send speech recognition message state"""
         self.__sendMessage("speechrecognitionstate", True)
+
+    def _sendSpheroInfo(self):
+        """Send paired sphero info"""
+        from sphero import Sphero
+        msg = {"spheros": Sphero().sphero_list.keys(), "current": Sphero().sphero_name}
+        self.__sendMessage("spheroinfo", msg)
 
     def __sendMessage(self, topic, content):
         """Wrap object and message in a json payload"""

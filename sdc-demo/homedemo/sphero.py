@@ -21,11 +21,12 @@ import logging
 import os
 import sys
 from time import sleep, time
+import yaml
 from mock import Mock
 
 from home import Home
 from servers import WebClientsCommands
-from tools import MainLoop, Singleton
+from tools import MainLoop, Singleton, suppress
 
 # enable importing kulka as if it was an external module
 sys.path.insert(0, os.path.dirname(__file__))
@@ -39,14 +40,27 @@ class Sphero(object):
     """The Sphero protected (only one thread access to it) representation"""
     __metaclass__ = Singleton
 
+    SPHERO_FILE = "sphero.hw"
     default_sphero_color = (221, 72, 20)
 
     def __init__(self, without_sphero=False):
         if not without_sphero:
             logger.debug("Connecting to sphero")
-            sphero_hw = "sphero.hw"
             try:
-                self.sphero = kulka.Kulka(open(sphero_hw).read().strip())
+                self.sphero_list = yaml.load(open(Sphero.SPHERO_FILE).read())
+                print(self.sphero_list)
+            except IOError:
+                logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
+                sys.exit(1)
+            sphero_addr = None
+            for sphero_name in self.sphero_list:
+                with suppress(KeyError):
+                    if self.sphero_list[sphero_name]["active"]:
+                        self.sphero_name = sphero_name
+                        sphero_addr = self.sphero_list[sphero_name]["address"]
+            try:
+                #self.sphero = kulka.Kulka(sphero_addr)
+                self.sphero = Mock()
             except IOError:
                 logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
                 sys.exit(1)
@@ -55,10 +69,22 @@ class Sphero(object):
             self.sphero.set_rgb(*self.default_sphero_color)
         else:
             logger.info("Using a false sphero")
+            self.sphero_name = "fake"
+            self.sphero_list = [self.sphero_name]
             self.sphero = Mock()
         self._current_room = Home().start_room
         self.last_move = time()
         self.in_calibration = False
+
+    @MainLoop.in_mainloop_thread
+    def change_default_sphero(self, new_sphero):
+        """Change default sphero and exit program"""
+        print("change_default_sphero")
+        self.sphero_list[self.sphero_name]["active"] = False
+        self.sphero_list[new_sphero]["active"] = True
+        with open(Sphero.SPHERO_FILE, "w") as f:
+            yaml.dump(self.sphero_list, f)
+        Sphero().quit()
 
     @property
     def current_room(self):

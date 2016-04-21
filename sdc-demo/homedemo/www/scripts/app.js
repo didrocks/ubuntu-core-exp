@@ -8,6 +8,9 @@
   app.current_room = 'space';
   app.availables_room = ['earth', 'space', 'gallifrey', 'skaro'];
   app.current_room_index = 0;
+  app.current_sphero = 'None';
+  app.spheros = [app.current_sphero];
+  app.current_sphero_index = 0;
 
   app.facedetection_enabled = false;
   app.speechrecognition_enabled = false;
@@ -101,6 +104,18 @@
       websocket.send(JSON.stringify(msg));
     });
 
+    /* change default sphero */
+    var defaultSpheroMenu = document.querySelector('#change-default-sphero');
+    defaultSpheroMenu.addEventListener('iron-select', function () {
+      // don't do anything for noop (can be triggered when external elements change it)
+      if (app.current_sphero === defaultSpheroMenu.selectedItemLabel) {
+        return;
+      }
+
+      var msg = { topic: 'changesphero', content: defaultSpheroMenu.selectedItemLabel };
+      websocket.send(JSON.stringify(msg));
+    });
+
     /* quit server */
     document.querySelector('#restartButton').addEventListener('click', function () {
        var msg = { topic: 'quit', content: '' };
@@ -146,6 +161,13 @@
           break;
         case 'speechrecognitionstate':
           app.speechrecognition_enabled = message.content;
+          break;
+        case 'spheroinfo':
+          app.spheros = message.content.spheros;
+          app.current_sphero = message.content.current;
+          app.current_sphero_index = -1;  // force a reindex
+          app.current_sphero_index = app.spheros.indexOf(app.current_sphero);
+          console.log(app.current_sphero_index);
           break;
         default:
           console.log('Unknown message');
