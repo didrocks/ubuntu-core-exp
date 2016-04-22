@@ -68,7 +68,7 @@ class Sphero(object):
         else:
             logger.info("Using a false sphero")
             self.sphero_name = "fake"
-            self.sphero_list = [self.sphero_name]
+            self.sphero_list = {self.sphero_name: {}}
             self.sphero = Mock()
         self._current_room = Home().start_room
         self.last_move = time()
