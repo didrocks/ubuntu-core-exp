@@ -62,7 +62,7 @@ def switchlight(sphero):
         sleep(0.005)
     sleep(3)
     from sphero import Sphero
-    Sphero()._reset_default_color()
+    Sphero().reset_default_color()
 
 
 def welcome(sphero):

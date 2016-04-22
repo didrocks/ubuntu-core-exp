@@ -64,7 +64,7 @@ class Sphero(object):
                 sys.exit(1)
             logger.debug("Connected to sphero")
             self.sphero.set_inactivity_timeout(3600)
-            self._reset_default_color()
+            self.reset_default_color()
         else:
             logger.info("Using a false sphero")
             self.sphero_name = "fake"
@@ -125,7 +125,7 @@ class Sphero(object):
     def end_calibration(self):
         """End calibration phase and turn on stabilizer again"""
         logger.info("Calibration done")
-        self._reset_default_color()
+        self.reset_default_color()
         self.sphero.set_back_led(0)
         self.sphero.set_heading(0)
         self.in_calibration = False
@@ -177,6 +177,6 @@ class Sphero(object):
             logger.info("We can't stay in that room, travelling back")
             self._move_to_sync(previous_room, ingoback=True)
 
-    def _reset_default_color(self):
+    def reset_default_color(self):
         """Reset default sphero color (sync call)"""
         self.sphero.set_rgb(*self.default_sphero_color)
