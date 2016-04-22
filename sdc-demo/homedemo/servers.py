@@ -119,7 +119,7 @@ class WebClientsCommands(WebSocket):
     def sendSpeechRecognitionStateAll():
         """Send speech recognition message state to all clients"""
         for client in WebClientsCommands.clients:
-            client._sendSpeechRecognitionState
+            client._sendSpeechRecognitionState()
 
     @staticmethod
     def sendCalibrationStateAll():
@@ -149,7 +149,8 @@ class WebClientsCommands(WebSocket):
 
     def _sendSpeechRecognitionState(self):
         """Send speech recognition message state"""
-        self.__sendMessage("speechrecognitionstate", True)
+        from speechrecognition import SpeechRecognition
+        self.__sendMessage("speechrecognitionstate", SpeechRecognition().enabled)
 
     def _sendSpheroInfo(self):
         """Send paired sphero info"""
