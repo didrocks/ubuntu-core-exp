@@ -17,11 +17,28 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+import logging
+import os
+import subprocess
+import threading
 from time import sleep
+
+logger = logging.getLogger(__name__)
+_airconditioner_thread = None
 
 
 def aircondition(sphero):
-    print("Air condition simulate")
+    """Simulate air conditioner on/off"""
+    logger.info("Play a sound putting the air conditioner on and off")
+    global _airconditioner_thread
+    if not _airconditioner_thread:
+        _airconditioner_thread = AirConditioner()
+        _airconditioner_thread.start()
+    else:
+        _airconditioner_thread.stop()
+        _airconditioner_thread = None
+    sleep(3)
+
 
 def garagedoor(sphero):
     logger.info("Open gare door")
@@ -41,6 +58,25 @@ def switchlight(sphero):
         sleep(0.005)
     sleep(3)
     sphero._reset_default_color()
+
+
+class AirConditioner(threading.Thread):
+    """Play an air conditioner sound"""
+
+    def __init__(self, *args, **kwargs):
+        super(AirConditioner, self).__init__(*args, **kwargs)
+        self.stopped = False
+
+    def run(self):
+        """Start playing the wav file in a separate thread"""
+        conditioner_sound_file = os.path.join(os.path.dirname(__file__), "airconditioner.wav")
+        while(not self.stopped):
+            subprocess.call(["aplay", conditioner_sound_file])
+
+    def stop(self):
+        """Stop the running air conditioner"""
+        self.stopped = True
+        subprocess.call(["pkill", "aplay"])
 
 
 def _make_a_step(sphero, current_angle, speed, step_time):
