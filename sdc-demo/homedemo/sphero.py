@@ -134,7 +134,8 @@ class Sphero(object):
     @MainLoop.in_mainloop_thread
     def quit(self):
         logger.info("Exit requested. Putting sphero to sleep and exits.")
-        self.sphero.sleep()
+        #FIXME: don't put sphero to sleep for now, the call is blocking and if it arleady exited…
+        #self.sphero.sleep()
         MainLoop().quit()
 
     @MainLoop.in_mainloop_thread
