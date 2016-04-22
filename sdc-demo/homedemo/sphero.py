@@ -49,7 +49,7 @@ class Sphero(object):
             try:
                 self.sphero_list = yaml.load(open(self.sphero_file_path).read())
             except IOError:
-                logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
+                logger.error("Couldn't connect to sphero: {} doesn't exist".format(self.sphero_file_path))
                 sys.exit(1)
             sphero_addr = None
             for sphero_name in self.sphero_list:
@@ -60,7 +60,7 @@ class Sphero(object):
             try:
                 self.sphero = kulka.Kulka(sphero_addr)
             except IOError:
-                logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
+                logger.error("Couldn't connect to sphero: {} address isn't paired".format(sphero_addr))
                 sys.exit(1)
             logger.debug("Connected to sphero")
             self.sphero.set_inactivity_timeout(3600)
