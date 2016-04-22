@@ -10,6 +10,11 @@ binaries:
     exec: bin/homedemo.exports
     security-template: unconfined
 
+services:
+  spheroSpeech:
+    start: spheroSpeech
+    security-template: unconfined
+
 parts:
   demo:
     plugin: copy
@@ -25,3 +30,8 @@ parts:
      - python-numpy
      - python-mock
      - python-yaml
+  sensory:
+    plugin: make
+    source: https://github.com/didrocks/sensory-ubuntu-core-home-demo
+    source-type: git
+build-packages: [libasound2-dev]
