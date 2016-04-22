@@ -176,6 +176,15 @@ class Sphero(object):
             logger.info("We can't stay in that room, travelling back")
             self._move_to_sync(previous_room, ingoback=True)
 
+    @MainLoop.in_mainloop_thread
+    def move_to_distance(self, distance, angle):
+        '''Move sphero manually by distance/angle'''
+        logger.debug("Issuing manual roll({}, {})".format(distance, angle))
+        # put sphero in desired direction first
+        self.sphero.roll(0, angle)
+        sleep(0.5)
+        self.sphero.roll(distance, angle)
+
     def reset_default_color(self):
         """Reset default sphero color (sync call)"""
         self.sphero.set_rgb(*self.default_sphero_color)

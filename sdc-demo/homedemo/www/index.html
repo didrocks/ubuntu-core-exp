@@ -62,6 +62,27 @@
     paper-toast {
       --paper-toast-background-color: var(--canonical-aubergine);
     }
+
+    .manualmove {
+      flex-wrap: wrap;
+      display: flex;
+    }
+    .manualcell {
+      width: 32%;
+      padding: 10px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    .manualcell:nth-of-type(3n) {
+      margin-right: 0;
+    }
+    .manualcell:nth-of-type(3n+1) {
+      margin-left: 0;
+    }
+    iron-icon {
+      color: var(--ubuntu-orange);
+    }
   </style>
 </head>
 <body unresolved>
@@ -110,6 +131,41 @@
         <h3>Features toggle</h3>
         <paper-toggle-button id="face-detection-toggle" active={{facedetection_enabled}}>Face detection</paper-toggle-button>
         <paper-toggle-button id="speech-recognition-toggle" active={{speechrecognition_enabled}}>Speech recognition</paper-toggle-button>
+      </div>
+      <div class="row">
+        <h3>Move sphero manually</h3>
+        <div class="manualmove">
+          <div class="manualcell"></div>
+          <div class="manualcell horizontal layout center-justified">
+            <paper-button id="movepositionup" raised class="vertical layout center" disabled="[[invalid_move_input]]">
+              <iron-icon icon="arrow-upward"></iron-icon>
+              Up
+            </paper-button>
+          </div>
+          <div class="manualcell"></div>
+          <div class="manualcell horizontal layout center-justified">
+            <paper-button id="movepositionleft" raised class="horizontal layout center" disabled="[[invalid_move_input]]">
+              <iron-icon icon="arrow-back"></iron-icon>Left
+            </paper-button>
+          </div>
+          <div class="manualcell horizontal layout center-justified">
+            <paper-input id="movepositionvalue" label="distance" type="number" min="0" max="200"
+                         auto-validate error-message="0 - 200" invalid="{{invalid_move_input}}">
+            </paper-input>
+          </div>
+          <div class="manualcell horizontal layout center-justified">
+            <paper-button id="movepositionright" raised class="vertical layout center" disabled="[[invalid_move_input]]">
+              Right<iron-icon icon="arrow-forward"></iron-icon>
+            </paper-button></div>
+          <div class="manualcell"></div>
+          <div class="manualcell horizontal layout center-justified">
+            <paper-button id="movepositiondown" raised class="vertical layout center" disabled="[[invalid_move_input]]">
+              Down
+              <iron-icon icon="arrow-downward"></iron-icon>
+            </paper-button>
+          </div>
+          <div class="manualcell"></div>
+        </div>
       </div>
       <div class="row">
         <h3>Reset manually sphero position (sphero won't move)</h3>

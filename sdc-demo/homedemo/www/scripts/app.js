@@ -12,6 +12,8 @@
   app.spheros = [app.current_sphero];
   app.current_sphero_index = 0;
 
+  app.invalid_move_input = false;
+
   app.facedetection_enabled = false;
   app.speechrecognition_enabled = false;
 
@@ -79,6 +81,21 @@
       var msg = { topic: 'move', content: moveSpheroButton.selectedItemLabel };
       websocket.send(JSON.stringify(msg));
     });
+
+    /* manually move sphero by position */
+    document.querySelector('#movepositionup').addEventListener('click', function () { moveSpheroPosition(0); });
+    document.querySelector('#movepositionleft').addEventListener('click', function () { moveSpheroPosition(270); });
+    document.querySelector('#movepositiondown').addEventListener('click', function () { moveSpheroPosition(180); });
+    document.querySelector('#movepositionright').addEventListener('click', function () { moveSpheroPosition(90); });
+    function moveSpheroPosition(angle) {
+      var distance = document.querySelector('#movepositionvalue').value;
+      if (distance === '') {
+        return;
+      }
+
+      var msg = { topic: 'moveposition', content: { distance: distance, angle: angle } };
+      websocket.send(JSON.stringify(msg));
+    }
 
     /* manually set current location */
     var manualResetSpheroButton = document.querySelector('#manualreset-sphero');
