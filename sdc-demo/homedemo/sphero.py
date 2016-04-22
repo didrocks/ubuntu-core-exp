@@ -157,6 +157,9 @@ class Sphero(object):
         previous_room = self.current_room
 
         for path in self.current_room.paths[room.name]:
+            # head sphero in desired direction first (or that will be eaten in distance)
+            self.sphero.roll(0, path[1])
+            sleep(0.5)
             logger.debug("Issuing roll{}".format(path))
             self.sphero.roll(*path)
             sleep(3)
