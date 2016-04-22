@@ -78,11 +78,14 @@ class Sphero(object):
     def change_default_sphero(self, new_sphero):
         """Change default sphero and exit program"""
         print("change_default_sphero")
-        self.sphero_list[self.sphero_name]["active"] = False
-        self.sphero_list[new_sphero]["active"] = True
-        with open(self.sphero_file_path, "w") as f:
-            yaml.dump(self.sphero_list, f, default_flow_style=False)
-        Sphero().quit()
+        try:
+            self.sphero_list[new_sphero]["active"] = True
+            self.sphero_list[self.sphero_name]["active"] = False
+            with open(self.sphero_file_path, "w") as f:
+                yaml.dump(self.sphero_list, f, default_flow_style=False)
+            Sphero().quit()
+        except KeyError:
+            logger.warning("Client sent {} as new active sphero, this isn't valid".format(new_sphero))
 
     @property
     def current_room(self):
