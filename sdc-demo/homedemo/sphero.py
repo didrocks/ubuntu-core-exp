@@ -82,7 +82,7 @@ class Sphero(object):
             self.sphero_list[self.sphero_name]["active"] = False
             with open(self.sphero_file_path, "w") as f:
                 yaml.dump(self.sphero_list, f, default_flow_style=False)
-            Sphero().quit()
+            self.quit()
         except KeyError:
             logger.warning("Client sent {} as new active sphero, this isn't valid".format(new_sphero))
 
@@ -133,7 +133,8 @@ class Sphero(object):
 
     @MainLoop.in_mainloop_thread
     def quit(self):
-        logger.info("Exit requested")
+        logger.info("Exit requested. Putting sphero to sleep and exits.")
+        self.sphero.sleep()
         MainLoop().quit()
 
     @MainLoop.in_mainloop_thread
