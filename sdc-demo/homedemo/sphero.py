@@ -183,7 +183,7 @@ class Sphero(object):
     def move_to_distance(self, distance, angle):
         '''Move sphero manually by distance/angle'''
         logger.debug("Issuing manual roll({}, {})".format(distance, angle))
-        # put sphero in desired direction first
+        # head sphero in desired direction first
         self.sphero.roll(0, angle)
         sleep(0.5)
         self.sphero.roll(distance, angle)

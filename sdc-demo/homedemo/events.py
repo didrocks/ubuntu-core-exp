@@ -50,7 +50,6 @@ def garagedoor(sphero):
     rotate_by = 360 * 2 / num_steps
     for _ in range(num_steps + 1):
         current_angle = (current_angle + rotate_by) % 360
-        print(current_angle)
         _make_a_step(sphero, current_angle, 0, 0.3)
 
 
