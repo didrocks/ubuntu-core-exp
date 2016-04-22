@@ -17,18 +17,33 @@
 # this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-
-def kitchenlight(sphero):
-    print("kitchen light")
+from time import sleep
 
 
-def music(sphero):
-    print("play music")
-
+def aircondition(sphero):
+    print("Air condition simulate")
 
 def garagedoor(sphero):
-    print("garage door")
+    logger.info("Open gare door")
+    current_angle = 0
+    num_steps = 40
+    # make 2 loops
+    rotate_by = 360*2 / num_steps
+    for _ in range(num_steps+1):
+        current_angle = (current_angle + rotate_by) % 360
+        print(current_angle)
+        _make_a_step(sphero, current_angle, 0, 0.3)
+
+def switchlight(sphero):
+    """simulate light switch on"""
+    for i in range(255):
+        sphero.set_rgb(i, i, i)
+        sleep(0.005)
+    sleep(3)
+    sphero._reset_default_color()
 
 
-def light(sphero):
-    print("light")
+def _make_a_step(sphero, current_angle, speed, step_time):
+    sphero.roll(speed, current_angle)
+    sleep(step_time)
+    sphero.roll(0, current_angle)

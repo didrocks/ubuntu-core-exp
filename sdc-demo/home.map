@@ -4,12 +4,12 @@ kennel:
   paths:
     kitchen: ["40, 90"]
 kitchen:
-  event: "kitchenlight"
+  event: "switchlight"
   paths:
     bedroom: ["20, 90"]
     entrance: ["30, 180"]
 bedroom:
-  event: "music"
+  event: "switchlight"
 entrance:
   facedetectiondest: true
   speechrecognition: true
@@ -20,4 +20,4 @@ entrance:
 garage:
   event: "garagedoor"
 livingroom:
-  event: "light"
+  event: "aircondition"
