@@ -49,6 +49,10 @@ class Home(object):
         self._populate_room_basic_infos(home_map)
         self._build_direct_paths()
         self._build_other_paths()
+        self._simplify_all_room_paths()
+        for room in self.rooms:
+            logger.debug("======== {} ========".format(room))
+            logger.debug(self.rooms[room].paths)
 
     def _populate_room_basic_infos(self, home_map):
         """build room to room basic info"""
@@ -152,6 +156,23 @@ class Home(object):
             room.paths[next_room_name] = new_path
             self._add_connected_room(room, next_room)
 
+    def _simplify_all_room_paths(self):
+        """Simplify all room paths if twice in the same direction"""
+        for room_name in self.rooms:
+            for dest_room in self.rooms[room_name].paths:
+                previous_dist = None
+                previous_angle = None
+                new_path = []
+                for segment in self.rooms[room_name].paths[dest_room]:
+                    dist, angle = segment
+                    # can be simplified, remove last segment and add distance
+                    if previous_angle is not None and previous_angle == angle:
+                        dist += previous_dist
+                        new_path = new_path[:-1]
+                    previous_dist = dist
+                    previous_angle = angle
+                    new_path.append((dist, angle))
+                self.rooms[room_name].paths[dest_room] = new_path
 
 class Room(object):
     """A room in the house"""
