@@ -1,0 +1,27 @@
+name: sdc-demo
+version: 0.42
+summary: Demo for SDC
+vendor: didrocks@ubuntu.com
+description: Transform your home routeur in an intelligent machine
+icon: icon.png
+
+binaries:
+  homedemo:
+    exec: bin/homedemo.exports
+    security-template: unconfined
+
+parts:
+  demo:
+    plugin: copy
+    files:
+      'bin/*': 'bin/'
+      'home.map': 'home.map'
+      'sphero.hw': 'sphero.hw'
+      'logic.xml': 'logic.xml'
+      'homedemo': 'homedemo'
+    stage-packages:
+     - python-dev
+     - python-opencv
+     - python-numpy
+     - python-mock
+     - python-yaml
