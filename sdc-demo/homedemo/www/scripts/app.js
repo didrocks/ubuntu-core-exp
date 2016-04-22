@@ -143,12 +143,12 @@
         case 'roomslist':
           app.availables_room = message.content;
           app.current_room_index = -1; // force a reindex
-          app.current_room_index = app.availables_room.indexOf(app.current_room);
+          Polymer.Base.async(function () { app.current_room_index = app.availables_room.indexOf(app.current_room); });
           break;
         case 'currentroom':
           app.current_room = message.content;
           app.current_room_index = -1; // force a reindex
-          app.current_room_index = app.availables_room.indexOf(app.current_room);
+          Polymer.Base.async(function () { app.current_room_index = app.availables_room.indexOf(app.current_room); });
           break;
         case 'calibrationstate':
           // if we didn't initiate the calibration, turn it to false
@@ -168,8 +168,7 @@
           app.spheros = message.content.spheros;
           app.current_sphero = message.content.current;
           app.current_sphero_index = -1;  // force a reindex
-          app.current_sphero_index = app.spheros.indexOf(app.current_sphero);
-          console.log(app.current_sphero_index);
+          Polymer.Base.async(function () { app.current_sphero_index = app.spheros.indexOf(app.current_sphero); });
           break;
         default:
           console.log('Unknown message');
