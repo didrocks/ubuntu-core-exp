@@ -6,14 +6,14 @@ description: Transform your home routeur in an intelligent machine
 icon: icon.png
 
 binaries:
-  homedemo:
-    exec: bin/homedemo.exports
-    security-template: unconfined
   spherospech:
     exec: spheroSpeech
     security-template: unconfined
 
-#services:
+services:
+  homedemo:
+    start: bin/homedemo.exports -vv
+    security-template: unconfined
 #  spheroSpeech:
 #    start: spheroSpeech
 #    security-template: unconfined
