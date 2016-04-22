@@ -58,8 +58,7 @@ class Sphero(object):
                         self.sphero_name = sphero_name
                         sphero_addr = self.sphero_list[sphero_name]["address"]
             try:
-                #self.sphero = kulka.Kulka(sphero_addr)
-                self.sphero = Mock()
+                self.sphero = kulka.Kulka(sphero_addr)
             except IOError:
                 logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
                 sys.exit(1)
