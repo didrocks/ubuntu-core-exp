@@ -60,7 +60,8 @@ def switchlight(sphero):
         sphero.set_rgb(i, i, i)
         sleep(0.005)
     sleep(3)
-    sphero._reset_default_color()
+    from sphero import Sphero
+    Sphero()._reset_default_color()
 
 
 class AirConditioner(threading.Thread):
