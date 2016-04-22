@@ -77,7 +77,6 @@ class Sphero(object):
     @MainLoop.in_mainloop_thread
     def change_default_sphero(self, new_sphero):
         """Change default sphero and exit program"""
-        print("change_default_sphero")
         try:
             self.sphero_list[new_sphero]["active"] = True
             self.sphero_list[self.sphero_name]["active"] = False
