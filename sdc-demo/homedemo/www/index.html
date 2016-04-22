@@ -57,6 +57,9 @@
       --paper-toggle-button-unchecked-button-color:  var(--ubuntu-orange);
       --paper-toggle-button-unchecked-ink-color: var(--ubuntu-orange);
     }
+    paper-toast {
+      --paper-toast-background-color: var(--canonical-aubergine);
+    }
   </style>
 </head>
 <body unresolved>
@@ -131,6 +134,7 @@
           <paper-button id="restartButton" raised disabled$="{{is_calibrating}}">Shut down and restart</paper-button>
         </div>
       </div>
+      <paper-toast text="Not connected to server" class="fit-bottom" opened$="{{!connected}}" duration="0"></paper-toast>
     </template>
   </div>
 </div>

@@ -15,6 +15,8 @@
   app.facedetection_enabled = false;
   app.speechrecognition_enabled = false;
 
+  app.connected = false;
+
   // imports are loaded and elements have been registered
   window.addEventListener('WebComponentsReady', function () {
 
@@ -126,10 +128,12 @@
     var websocket = new ReconnectingWebSocket('ws://' + window.location.hostname + ':8002/');
     websocket.onopen = function () {
       console.log('websocket connected');
+      app.connected = true;
     };
 
     websocket.onclose = function () {
       console.log('websocket disconnected');
+      app.connected = false;
     };
 
     websocket.onerror = function (e) {
