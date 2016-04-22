@@ -172,7 +172,7 @@ class Sphero(object):
         self.last_move = time()
 
         # travel back to previous room
-        if not room.stay:
+        if not room.stay and not ingoback:
             logger.info("We can't stay in that room, travelling back")
             self._move_to_sync(previous_room, ingoback=True)
 
