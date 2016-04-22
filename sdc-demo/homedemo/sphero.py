@@ -74,7 +74,6 @@ class Sphero(object):
         self.last_move = time()
         self.in_calibration = False
 
-    @MainLoop.in_mainloop_thread
     def change_default_sphero(self, new_sphero):
         """Change default sphero and exit program"""
         try:
@@ -131,12 +130,11 @@ class Sphero(object):
         self.in_calibration = False
         WebClientsCommands.sendCalibrationStateAll()
 
-    @MainLoop.in_mainloop_thread
     def quit(self):
         logger.info("Exit requested. Putting sphero to sleep and exits.")
         #FIXME: don't put sphero to sleep for now, the call is blocking and if it arleady exited…
         #self.sphero.sleep()
-        MainLoop().quit()
+        os._exit(0)
 
     @MainLoop.in_mainloop_thread
     def move_to(self, room_name):
