@@ -2,12 +2,12 @@ kennel:
   start: true
   stay: true
   paths:
-    kitchen: ["40, 90"]
+    kitchen: ["30, 90"]
 kitchen:
   event: "switchlight"
   paths:
-    bedroom: ["20, 90"]
-    entrance: ["30, 180"]
+    bedroom: ["30, 90"]
+    entrance: ["10, 90", "30, 180"]
 bedroom:
   event: "switchlight"
 entrance:
@@ -15,6 +15,7 @@ entrance:
   speechrecognition: true
   event: "welcome"
   paths:
+    bedroom: ["30, 0", "20, 90"]
     garage: ["20, 90"]
     livingroom: ["40, 270"]
   stay: true
