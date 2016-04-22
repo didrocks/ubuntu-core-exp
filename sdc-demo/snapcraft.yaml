@@ -9,11 +9,14 @@ binaries:
   homedemo:
     exec: bin/homedemo.exports
     security-template: unconfined
-
-services:
-  spheroSpeech:
-    start: spheroSpeech
+  spherospech:
+    exec: spheroSpeech
     security-template: unconfined
+
+#services:
+#  spheroSpeech:
+#    start: spheroSpeech
+#    security-template: unconfined
 
 parts:
   demo:
