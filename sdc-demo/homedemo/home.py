@@ -21,8 +21,9 @@ import events
 import logging
 import os
 import sys
-from tools import suppress, Singleton
 import yaml
+
+from tools import suppress, Singleton, get_data_path
 
 _home = None
 logger = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ class Home(object):
         self.facedetectdest_room = None
 
         logger.debug("Build home map")
-        with open("home.map", 'r') as f:
+        with open(os.path.join(get_data_path(), "home.map"), 'r') as f:
             home_map = yaml.load(f)
 
         self._populate_room_basic_infos(home_map)

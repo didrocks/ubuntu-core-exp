@@ -23,7 +23,7 @@ import os
 
 from servers import WebClientsCommands
 from sphero import Sphero
-from tools import Singleton, suppress
+from tools import Singleton, suppress, get_data_path
 
 logger = logging.getLogger(__name__)
 
@@ -32,12 +32,12 @@ class SpeechRecognition(object):
     """We are reading a file for now on speech recognition"""
     __metaclass__ = Singleton
 
-    FILENAME = "speech.recognition"
 
     def __init__(self):
         """Create this Speech recognition object"""
         self._source_id = None
         self._enabled = False
+        self.speech_recognition_file_path = os.path.join(get_data_path(), "speech.recognition")
         GLib.timeout_add_seconds(1, self.check_speech_recognition)
 
     @property
@@ -58,7 +58,7 @@ class SpeechRecognition(object):
         with suppress(IOError):
             # we want to always remove the speech recognition file, even if enabled
             if self.enabled and Sphero().current_room.speech_recognition:
-                with open(self.FILENAME) as f:
+                with open(self.speech_recognition_file_path) as f:
                     action_name = f.read().strip()
                     dest_room = None
                     # for now, redo a mapping between actions and room name (FIXME, get all events names as config)
@@ -77,6 +77,6 @@ class SpeechRecognition(object):
                     if dest_room:
                         Sphero().move_to(dest_room)
             with suppress(OSError):
-                os.remove(self.FILENAME)
+                os.remove(self.speech_recognition_file_path)
 
         return True

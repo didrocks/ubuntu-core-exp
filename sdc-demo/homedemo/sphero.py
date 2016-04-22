@@ -26,7 +26,7 @@ from mock import Mock
 
 from home import Home
 from servers import WebClientsCommands
-from tools import MainLoop, Singleton, suppress
+from tools import MainLoop, Singleton, suppress, get_data_path
 
 # enable importing kulka as if it was an external module
 sys.path.insert(0, os.path.dirname(__file__))
@@ -40,14 +40,14 @@ class Sphero(object):
     """The Sphero protected (only one thread access to it) representation"""
     __metaclass__ = Singleton
 
-    SPHERO_FILE = "sphero.hw"
     default_sphero_color = (221, 72, 20)
 
     def __init__(self, without_sphero=False):
+        self.sphero_file_path = os.path.join(get_data_path(), "sphero.hw")
         if not without_sphero:
             logger.debug("Connecting to sphero")
             try:
-                self.sphero_list = yaml.load(open(Sphero.SPHERO_FILE).read())
+                self.sphero_list = yaml.load(open(self.sphero_file_path).read())
             except IOError:
                 logger.error("Couldn't connect to sphero: {} doesn't exist".format(sphero_hw))
                 sys.exit(1)
@@ -80,7 +80,7 @@ class Sphero(object):
         print("change_default_sphero")
         self.sphero_list[self.sphero_name]["active"] = False
         self.sphero_list[new_sphero]["active"] = True
-        with open(Sphero.SPHERO_FILE, "w") as f:
+        with open(self.sphero_file_path, "w") as f:
             yaml.dump(self.sphero_list, f, default_flow_style=False)
         Sphero().quit()
 
