@@ -114,6 +114,7 @@ class suppress:
         # See http://bugs.python.org/issue12029 for more details
         return exctype is not None and issubclass(exctype, self._exceptions)
 
+
 def get_data_path():
     """Return writable data path"""
     return os.getenv("SNAP_APP_DATA_PATH", os.getcwd())

@@ -41,18 +41,21 @@ def aircondition(sphero):
 
 
 def garagedoor(sphero):
+    """Simulating opening the garage door"""
     logger.info("Open gare door")
     current_angle = 0
     num_steps = 40
     # make 2 loops
-    rotate_by = 360*2 / num_steps
-    for _ in range(num_steps+1):
+    rotate_by = 360 * 2 / num_steps
+    for _ in range(num_steps + 1):
         current_angle = (current_angle + rotate_by) % 360
         print(current_angle)
         _make_a_step(sphero, current_angle, 0, 0.3)
 
+
 def switchlight(sphero):
     """simulate light switch on"""
+    logger.info("Light switch on (on sphero)")
     for i in range(255):
         sphero.set_rgb(i, i, i)
         sleep(0.005)

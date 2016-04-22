@@ -32,7 +32,6 @@ class SpeechRecognition(object):
     """We are reading a file for now on speech recognition"""
     __metaclass__ = Singleton
 
-
     def __init__(self):
         """Create this Speech recognition object"""
         self._source_id = None
