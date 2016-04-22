@@ -19,6 +19,7 @@
 
 import logging
 import os
+import random
 import subprocess
 import threading
 from time import sleep
@@ -63,6 +64,20 @@ def switchlight(sphero):
     from sphero import Sphero
     Sphero()._reset_default_color()
 
+
+def welcome(sphero):
+    """Let sphero welcome you"""
+    logger.info("Sphero welcome!")
+    for _ in range(4):
+        sphero.roll(0, 20)
+        sphero.set_rgb(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        sleep(0.2)
+        sphero.roll(0, -20 % 360)
+        sphero.set_rgb(0, 0, 0)
+        sleep(0.2)
+    sphero.roll(0, 0)
+    from sphero import Sphero
+    Sphero().reset_default_color()
 
 class AirConditioner(threading.Thread):
     """Play an air conditioner sound"""

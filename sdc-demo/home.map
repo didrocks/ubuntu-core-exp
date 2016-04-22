@@ -13,6 +13,7 @@ bedroom:
 entrance:
   facedetectiondest: true
   speechrecognition: true
+  event: "welcome"
   paths:
     garage: ["20, 90"]
     livingroom: ["40, 270"]
