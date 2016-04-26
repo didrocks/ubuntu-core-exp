@@ -5,18 +5,13 @@ vendor: didrocks@ubuntu.com
 description: Transform your home routeur in an intelligent machine
 icon: icon.png
 
-binaries:
-  spherospech:
-    exec: spheroSpeech
-    security-template: unconfined
-
 services:
   homedemo:
     start: bin/homedemo.exports -vv
     security-template: unconfined
-#  spheroSpeech:
-#    start: spheroSpeech
-#    security-template: unconfined
+  spheroSpeech:
+    start: spheroSpeech
+    security-template: unconfined
 
 parts:
   demo:
