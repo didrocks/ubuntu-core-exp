@@ -173,6 +173,8 @@ class Sphero(object):
             room.event(self.sphero)
 
         self.last_move = time()
+        from speechrecognition import SpeechRecognition
+        SpeechRecognition().clean_speech_recognition_state()
 
         # travel back to previous room
         if not room.stay and not ingoback:

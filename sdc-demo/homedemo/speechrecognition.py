@@ -75,7 +75,10 @@ class SpeechRecognition(object):
 
                     if dest_room:
                         Sphero().move_to(dest_room)
-            with suppress(OSError):
-                os.remove(self.speech_recognition_file_path)
+            self.clean_speech_recognition_state()
 
         return True
+
+    def clean_speech_recognition_state(self):
+        with suppress(OSError):
+            os.remove(self.speech_recognition_file_path)
