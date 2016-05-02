@@ -37,7 +37,7 @@ class SpeechRecognition(object):
         self._source_id = None
         self._enabled = False
         self.speech_recognition_file_path = os.path.join(get_data_path(), "speech.recognition")
-        GLib.timeout_add_seconds(1, self.check_speech_recognition)
+        GLib.timeout_add_seconds(0.1, self.check_speech_recognition)
 
     @property
     def enabled(self):
