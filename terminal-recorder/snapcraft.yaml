@@ -12,7 +12,7 @@ apps:
     daemon: simple
     plugs: [listener]
   record-terminal:
-    command: record-terminal.limited
+    command: record-terminal
     plugs: [unconfined-plug]
 
 plugs:
