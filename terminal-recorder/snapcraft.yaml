@@ -27,15 +27,12 @@ parts:
   webserver:
     plugin: nodejs
     source: https://github.com/didrocks/asciinema-local-server.git
-    source-type: git
   asciinema:
     plugin: go
     source: https://github.com/asciinema/asciinema.git
-    source-type: git
   recorder-command-glue:
     plugin: copy
     source: https://github.com/didrocks/terminal-recorder-glue.git
-    source-type: git
     files:
       'record-terminal*': '.'
     stage-packages: [qrencode, byobu]
