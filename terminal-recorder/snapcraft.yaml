@@ -29,7 +29,8 @@ parts:
     source: https://github.com/didrocks/asciinema-local-server.git
   asciinema:
     plugin: go
-    source: https://github.com/asciinema/asciinema.git
+    source: https://github.com/asciinema/asciinema
+    source-type: git
   recorder-command-glue:
     plugin: copy
     source: https://github.com/didrocks/terminal-recorder-glue.git
